@@ -326,24 +326,20 @@
 </section>
 
 <section>
-  <h2>Stage 3 — Claude Code takes on from there</h2>
-  <p>This is where the build was won. Claude Code (Anthropic's CLI, running Opus 4.7 with a million-token context) operated as a <strong>full-stack agent with shell access</strong> — writing application code, provisioning Postgres, running migrations, supervising PM2, configuring live Nginx, and issuing TLS certs, all in the same session.</p>
+  <h2>Stage 3 — Claude Code, the Coding Partner, takes it from there</h2>
+  <p>This is where the heavy lifting happened, in partnership. Claude Code (Anthropic's CLI, running Opus 4.7 with a million-token context) operated as a <strong>full-stack Coding Partner with shell access</strong> — joint work with the operator on application code, Postgres provisioning, migrations, PM2 supervision, live Nginx configuration, and TLS issuance, all in the same session.</p>
 
-  <h3>What Claude built (frontend)</h3>
-  <p>Merged the six standalone Vite apps into a single pnpm monorepo. Extracted shared <code>SiteHeader</code> and <code>SiteFooter</code>. Wired React Router 7 with <code>Suspense</code>-based code splitting (Home eager as the LCP target; everything else lazy). Wrote a no-deps <code>usePageMeta</code> hook to replace <code>react-helmet-async</code>, which doesn't support React 19. Lifted Figma's hardcoded hex colors into Tailwind v4 <code>@theme</code> tokens. Wired the contact form with honeypot + rate limit + sonner toast feedback. Added <code>BranchDetailPage</code> for <code>/branches/:slug</code> with Schema.org <code>Restaurant</code> JSON-LD generated from CMS data.</p>
+  <h3>What the Coding Partner scaffolded (frontend)</h3>
+  <p>Merged the six standalone Vite apps into a single pnpm monorepo. Extracted shared <code>SiteHeader</code> and <code>SiteFooter</code>. Wired React Router 7 with <code>Suspense</code>-based code splitting (Home eager as the LCP target; everything else lazy). Authored a no-deps <code>usePageMeta</code> hook to replace <code>react-helmet-async</code>, which doesn't support React 19. Lifted hardcoded hex colors into Tailwind v4 <code>@theme</code> tokens. Wired the contact form with honeypot + rate limit + sonner toast feedback. Added <code>BranchDetailPage</code> for <code>/branches/:slug</code> with Schema.org <code>Restaurant</code> JSON-LD generated from CMS data.</p>
 
-  <h3>What Claude built (backend, from scratch)</h3>
-  <p><code>packages/cms/</code>: Payload CMS v2.32 on Express, port 3030. Six collections — <code>Users</code>, <code>Media</code>, <code>Branches</code>, <code>MenuItems</code>, <code>FAQs</code>, <code>ContactSubmissions</code>. Postgres adapter via drizzle. Custom <code>POST /api/contact</code> endpoint with zod validation. Idempotent <code>seed.ts</code> creating the admin user, three branches, four FAQs, and ten menu items. CORS + CSRF allowlist. React 18 isolated from the web's React 19 to keep the admin UI bundle clean.</p>
+  <h3>What the Coding Partner scaffolded (backend, from scratch)</h3>
+  <p><code>packages/cms/</code>: Payload CMS v2.32 on Express, port 3030. Six collections — <code>Users</code>, <code>Media</code>, <code>Branches</code>, <code>MenuItems</code>, <code>FAQs</code>, <code>ContactSubmissions</code>. Postgres adapter via drizzle. Custom <code>POST /api/contact</code> endpoint with zod validation. Idempotent <code>seed.ts</code> producing the admin user, three branches, four FAQs, and ten menu items. CORS + CSRF allowlist. React 18 isolated from the web's React 19 to keep the admin UI bundle clean.</p>
 
-  <h3>What Claude built (CMS-driven frontend)</h3>
-  <p>A small <code>useCms</code> SWR-style hook (no extra dep — just <code>fetch</code> + an in-memory cache). Wired <code>BranchesPage</code>, <code>BranchDetailPage</code>, <code>MenuPage</code> (with category Tabs as state-driven filter), and <code>ServicesPage</code> FAQ accordion all to fetch from Payload's REST API. Generated Schema.org <code>Menu</code> / <code>MenuSection</code> / <code>MenuItem</code> JSON-LD with <code>suitableForDiet</code> and <code>offers.price</code> from the CMS — making good on what the original Figma export had only <em>claimed</em> in a developer note.</p>
+  <h3>What the Coding Partner scaffolded (CMS-driven frontend)</h3>
+  <p>A small <code>useCms</code> SWR-style hook (no extra dep — just <code>fetch</code> + an in-memory cache). Wired <code>BranchesPage</code>, <code>BranchDetailPage</code>, <code>MenuPage</code> (with category Tabs as state-driven filter), and <code>ServicesPage</code> FAQ accordion all to fetch from Payload's REST API. Generated Schema.org <code>Menu</code> / <code>MenuSection</code> / <code>MenuItem</code> JSON-LD with <code>suitableForDiet</code> and <code>offers.price</code> from the CMS — making good on what the original scaffold had only <em>claimed</em> in a developer note.</p>
 
-  <h3>What Claude built (infra)</h3>
+  <h3>What the Coding Partner scaffolded (infra)</h3>
   <p>PM2 ecosystem config, Nginx vhost block (appended to the existing <code>subdomains.gaiada.online</code> file matching fleet convention), Postgres bootstrap SQL, deploy script, backup script, GitHub Actions CI workflow. On the server: chowned the directory, generated a 32-byte <code>PAYLOAD_SECRET</code>, created the Postgres role + DB, ran migrations, ran seeds, integrated the Nginx vhost, ran <code>certbot --nginx</code> for Let's Encrypt + HTTP→HTTPS 301, and registered the PM2 app for boot persistence.</p>
-
-  <div class="callout">
-    <strong>The unlock:</strong> Claude wasn't just a code generator. It was a sysadmin, a DBA, a release engineer, and a debugger — all in the same session, with the same context. Without that operational scope, the same work would have taken days.
-  </div>
 </section>
 
 <section>

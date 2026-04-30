@@ -61,11 +61,11 @@ references/figma-exports/        ← the raw Flowstep output (later cleaned out)
 
 **Human time: paste prompt, wait, download zip.**
 
-### Stage 3 — Claude Code (consolidation, backend, deploy, iteration)
+### Stage 3 — Claude Code, the Coding Partner, takes it from there
 
-The 6 disconnected Vite projects landed in this repo's `references/figma-exports/`. Then Claude Code (Opus 4.7, 1M context, running in this terminal) consolidated everything into one production site over ~4 hours of focused work.
+The 6 disconnected Vite projects landed in this repo's `references/figma-exports/`. Then Claude Code (Opus 4.7, 1M context, running in this terminal) — operating as a Coding Partner — joined the operator to scaffold everything into one production site over ~4 hours of focused work.
 
-**What Claude built:**
+**What the Coding Partner scaffolded (joint work with the operator):**
 
 | | |
 |---|---|
@@ -96,8 +96,8 @@ The 6 disconnected Vite projects landed in this repo's `references/figma-exports
 **AI did:**
 - Wrote the 1,400-line Prompt Builder app (Stage 1 — also AI-built)
 - Generated all 5,100+ lines of frontend page JSX (Stage 2)
-- Wrote 100% of the Payload backend, all collections, the contact endpoint, the seed script (Stage 3)
-- Wrote all infra: PM2 config, Nginx vhost, deploy script, backup script, CI workflow (Stage 3)
+- Scaffolded the Payload backend, all collections, the contact endpoint, the seed script (Stage 3)
+- Scaffolded all infra: PM2 config, Nginx vhost, deploy script, backup script, CI workflow (Stage 3)
 - Provisioned the server: chowned the dir, generated secrets, created the Postgres DB + role, ran migrations, ran seeds, configured Nginx, issued the TLS cert (Stage 3)
 - Iterated when things broke: caught and fixed an ESM/CJS conflict in Payload v2 builds, an `EADDRINUSE` from an orphan node process, a `serverURL` empty-string fallback that Payload coerced to localhost, a Payload v2 `migrate:create` that no-ops new columns on existing tables, a Capistrano-style deploy layout that didn't match the fleet (then flattened it on instruction)
 
