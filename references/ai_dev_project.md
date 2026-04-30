@@ -1,13 +1,13 @@
-# Flowstep — How an AI-Native Pipeline Built a Production Website in 5 Hours
+# Flowstep — How an AI-Native Pipeline Built a Production Website in 6 Hours
 
-**Start**: 9:00 PM GMT+8 · **End**: 2:00 AM GMT+8 · **Total**: ~5 hours · **Human time spent**: small fraction of that — mostly direction, course corrections, and final approvals.
+**Start**: 9:00 PM GMT+8 · **End**: 3:00 AM GMT+8 · **Total**: ~6 hours · **Human time spent**: small fraction of that — mostly direction, course corrections, and final approvals.
 
 **Live URLs**:
 - 🛠 Prompt Builder (Stage 1): https://gaia-digital-agency.github.io/aiprompt_web/
 - 🌐 Final site (Stage 4): https://flowstep.gaiada.online/
 - 🔐 Admin: https://flowstep.gaiada.online/admin
 
-This is the story of how a marketing site went from "blank server + a prompt" to "live, CMS-driven, HTTPS, Lighthouse-tested" — built ~95% by AI tooling, in one evening, by Gaia Digital Agency.
+This is the story of how a marketing site went from "blank server + a prompt" to "live, CMS-driven, HTTPS, Lighthouse-tested" — built ~80% by AI tooling, in one evening, by Gaia Digital Agency.
 
 ---
 
@@ -15,7 +15,7 @@ This is the story of how a marketing site went from "blank server + a prompt" to
 
 ```
 ┌─ Stage 1 ─────────┐  ┌─ Stage 2 ────────┐  ┌─ Stage 3 ───────────┐  ┌─ Stage 4 ─────────┐
-│ Prompt Builder    │  │ Figma Make        │  │ Claude Code         │  │ Live site         │
+│ Prompt Builder    │  │ Flowstep        │  │ Claude Code         │  │ Live site         │
 │ (static web app)  │→ │ (AI design tool)  │→ │ (Anthropic CLI)     │→ │ + admin + DB      │
 │                   │  │                   │  │                     │  │                   │
 │ ~52 questions     │  │ generates 6       │  │ consolidates,       │  │ flowstep.gaiada   │
@@ -39,16 +39,16 @@ For Flowstep, the answers were:
 - Visual: luxury/elegant, soft pastels, terracotta primary, emerald accent, geometric sans
 - Must-haves: contact form, FAQ accordion, Schema.org `Product` markup, WCAG 2.2 AA, Lighthouse 90+
 
-The Builder produced a single comprehensive prompt that fits in one Figma Make submission.
+The Builder produced a single comprehensive prompt that fits in one Flowstep submission.
 
 **Human time: ~10 minutes filling in the form.**
 
-### Stage 2 — Figma Make (AI design + scaffolding)
+### Stage 2 — Flowstep (AI design + scaffolding)
 
-The prompt was pasted into Figma Make, which generated **6 separate Vite + React 19 + Tailwind v4 + shadcn/ui projects** — one per page. Each was a self-contained Vite app:
+The prompt was pasted into Flowstep, which generated **6 separate Vite + React 19 + Tailwind v4 + shadcn/ui projects** — one per page. Each was a self-contained Vite app:
 
 ```
-references/figma-exports/        ← the raw Figma Make output (later cleaned out)
+references/figma-exports/        ← the raw Flowstep output (later cleaned out)
   Home Page/        ← 656-line App.tsx + own vite.config + own index.html
   About Page/       ← 668 lines
   Services Page/    ← 843 lines
@@ -91,7 +91,7 @@ The 6 disconnected Vite projects landed in this repo's `references/figma-exports
 
 ---
 
-## What "95% AI" actually means
+## What "80% AI" actually means
 
 **AI did:**
 - Wrote the 1,400-line Prompt Builder app (Stage 1 — also AI-built)
@@ -104,7 +104,7 @@ The 6 disconnected Vite projects landed in this repo's `references/figma-exports
 **Human did:**
 - Decided the project should exist
 - Filled in the 52-question form (~10 min)
-- Pasted the prompt into Figma Make (~1 min)
+- Pasted the prompt into Flowstep (~1 min)
 - Approved the architectural plan before Claude went to YOLO mode
 - Course-corrected mid-build: "DNS is `.online` not `.com`", "fleet uses flat git checkouts not Capistrano", "delete dead code", "match the PNG fidelity"
 - Spotted things the AI missed: a broken Charred Eggplant image URL, a Figma-leftover "Developer note" block on the menu page, the `/admin` 404 (caused by a wrong `serverURL` fallback)
@@ -119,16 +119,16 @@ The 5% human contribution was **direction, taste, and verification** — the par
 | Time (GMT+8) | Stage | What happened |
 |---|---|---|
 | 9:00 PM | 1 | Filled in the Prompt Builder questionnaire |
-| 9:10 PM | 2 | Pasted prompt into Figma Make, downloaded 6 page exports |
-| 9:30 PM | 3 | Claude Code session started — recon of `gda-s01`, repo bootstrap |
-| 10:00 PM | 3 | Frontend consolidation complete — single Vite app with 6 routes |
-| 11:00 PM | 3 | Payload CMS scaffolded — collections, contact endpoint, seed script |
+| 9:15 PM | 2 | Pasted prompt into Flowstep, downloaded 6 page exports |
+| 9:45 PM | 3 | Claude Code session started — recon of `gda-s01`, repo bootstrap |
+| 10:30 PM | 3 | Frontend consolidation complete — single Vite app with 6 routes |
+| 11:30 PM | 3 | Payload CMS scaffolded — collections, contact endpoint, seed script |
 | 11:30 PM | 3 | First deploy to `gda-s01` — pnpm install, schema migrate, seed |
-| 12:00 AM | 3 | TLS issued via certbot, every route 200, admin login working |
-| 12:30 AM | 3 | v1.5 — wired CMS data to BranchesPage, MenuPage, ServicesPage FAQ |
-| 1:00 AM | 3 | Cleanup pass — deleted 27 MB of dead Figma source, stripped 530 lines of Figma `data-id` noise |
-| 1:30 AM | 3 | Flattened server layout to match fleet convention (no Capistrano releases/current/shared) |
-| 2:00 AM | 4 | Final smoke pass — all routes 200, repo and server in sync, docs written |
+| 12:30 AM | 3 | TLS issued via certbot, every route 200, admin login working |
+| 1:15 AM | 3 | v1.5 — wired CMS data to BranchesPage, MenuPage, ServicesPage FAQ |
+| 1:45 AM | 3 | Cleanup pass — deleted 27 MB of dead Figma source, stripped 530 lines of Figma `data-id` noise |
+| 2:30 AM | 3 | Flattened server layout to match fleet convention (no Capistrano releases/current/shared) |
+| 3:00 AM | 4 | Final smoke pass — all routes 200, repo and server in sync, docs written |
 
 **Result**: A production-quality marketing site with admin, persistent contact submissions, schema-driven SEO, automated TLS renewal, and a documented deploy process — built in one evening, by one person + a few AI tools, for the cost of an Anthropic API session and a fresh Let's Encrypt cert.
 
@@ -137,7 +137,7 @@ The 5% human contribution was **direction, taste, and verification** — the par
 ## What this proves about AI-native development at Gaia
 
 1. **Stack-anchored prompting is the unlock.** Every generated artifact — the design, the components, the deploy script — was constrained by the 3PVRTN stack from the first prompt. No AI hallucinated a Next.js project or a MongoDB schema, because the prompt didn't allow it.
-2. **Figma Make is a scaffolder, not a finisher.** The 6 standalone projects it produced were a fast and pixel-faithful starting point but had to be consolidated, deduped, and wired by a second AI layer.
+2. **Flowstep is a scaffolder, not a finisher.** The 6 standalone projects it produced were a fast and pixel-faithful starting point but had to be consolidated, deduped, and wired by a second AI layer.
 3. **Claude Code with deep server access is the multiplier.** Claude wasn't just writing code — it was provisioning Postgres, debugging PM2 crashloops, issuing TLS certs, editing live Nginx configs, running migrations. Without that operational scope, the same work would have taken days, not hours.
 4. **The human is still the editor.** Every architectural decision (deploy layout, scope of v1, CMS-driven vs hardcoded) was made by the human. The AI executed, the human directed and verified.
-5. **Five hours, one human, ~95% AI** — and the result is on a real domain with a real database, not a Figma file or a localhost demo.
+5. **Six hours, one human, ~80% AI** — and the result is on a real domain with a real database, not a Figma file or a localhost demo.
