@@ -152,35 +152,29 @@ export default function MenuPage() {
         <main
           className="mx-auto p-12"
           style={{ maxWidth: "1140px" }}
-          data-id="0a5d72c8-5dc9-517c-a5ed-f8d1787f5e87"
         >
           <section
             className="text-center flex pb-8 flex-col items-center gap-4"
-            data-id="07f80d54-3f89-51bd-918e-6ef62c53162a"
           >
             <span
               className="uppercase text-xs leading-4 tracking-[3.2px]"
               style={{ color: "#C4714F" }}
-              data-id="6994d5ae-37f6-5eb1-a3e1-f523fa713e2c"
             >
               The Gaia Kitchen
             </span>
             <h1
               className="font-normal text-5xl leading-12 tracking-tight"
               style={{ color: "#1F1B16" }}
-              data-id="8a2847d7-531a-540a-a712-1e6dd599cfe4"
             >
               Our Menu
             </h1>
             <div
               className="rounded-full w-16 h-0.5"
               style={{ backgroundColor: "#C4714F" }}
-              data-id="6f55013a-c03b-59e8-a238-26cfb2b50d41"
             />
             <p
               className="max-w-xl text-base leading-6"
               style={{ color: "#5C5247" }}
-              data-id="6d1618f2-8fb5-5955-9bf5-2401cad9dd91"
             >
               Seasonal ingredients, bold flavors, and dishes designed to delight
               every palate.
@@ -190,18 +184,15 @@ export default function MenuPage() {
             className="pb-8 w-full"
             value={active}
             onValueChange={setActive}
-            data-id="224b6635-c77c-5ceb-91e3-44c4f2b3f5f9"
           >
             <TabsList
               className="bg-transparent border-black/1 border-t-0 border-r-0 border-b-1 border-l-0 border-solid p-0 justify-center gap-2 w-full h-auto"
               style={{ borderColor: "#E8E2DC" }}
-              data-id="3cf9e922-f22b-5ec1-a1cf-4357f0249faf"
             >
               <TabsTrigger
                 className="text-sm leading-5 border-black/1 border-t-0 border-r-0 border-b-2 border-l-0 border-solid px-4 py-3"
                 style={{ borderColor: "#C4714F", color: "#C4714F" }}
                 value="all"
-                data-id="2b26a1d6-a134-5b5b-aa62-32d678de6f82"
               >
                 All
               </TabsTrigger>
@@ -209,7 +200,6 @@ export default function MenuPage() {
                 className="border-transparent text-sm leading-5 border-black/1 border-t-0 border-r-0 border-b-2 border-l-0 border-solid px-4 py-3"
                 style={{ color: "#5C5247" }}
                 value="starters"
-                data-id="4786b043-fc42-5826-8085-d384ef58fae4"
               >
                 Starters
               </TabsTrigger>
@@ -217,7 +207,6 @@ export default function MenuPage() {
                 className="border-transparent text-sm leading-5 border-black/1 border-t-0 border-r-0 border-b-2 border-l-0 border-solid px-4 py-3"
                 style={{ color: "#5C5247" }}
                 value="mains"
-                data-id="94f6620c-d3f0-5fb3-8f32-3493d71ebe14"
               >
                 Mains
               </TabsTrigger>
@@ -225,7 +214,6 @@ export default function MenuPage() {
                 className="border-transparent text-sm leading-5 border-black/1 border-t-0 border-r-0 border-b-2 border-l-0 border-solid px-4 py-3"
                 style={{ color: "#5C5247" }}
                 value="desserts"
-                data-id="0d68dfdb-2586-5961-a4ad-c5829183563d"
               >
                 Desserts
               </TabsTrigger>
@@ -233,7 +221,6 @@ export default function MenuPage() {
                 className="border-transparent text-sm leading-5 border-black/1 border-t-0 border-r-0 border-b-2 border-l-0 border-solid px-4 py-3"
                 style={{ color: "#5C5247" }}
                 value="drinks"
-                data-id="529d013e-723d-52e0-9082-e57995d8c976"
               >
                 Drinks
               </TabsTrigger>
@@ -241,7 +228,6 @@ export default function MenuPage() {
                 className="border-transparent text-sm leading-5 border-black/1 border-t-0 border-r-0 border-b-2 border-l-0 border-solid px-4 py-3"
                 style={{ color: "#5C5247" }}
                 value="specials"
-                data-id="27900345-12df-5c74-9a05-51eb3aa65527"
               >
                 Chef's Specials
               </TabsTrigger>
@@ -249,7 +235,6 @@ export default function MenuPage() {
           </Tabs>
           <section
             className="grid grid-cols-3 gap-6"
-            data-id="fa837ed9-0a7a-56ee-a540-8078f00a4d95"
           >
             {loading && (
               <div className="col-span-3 text-center text-sm text-[#1F1B17]/50 py-12">

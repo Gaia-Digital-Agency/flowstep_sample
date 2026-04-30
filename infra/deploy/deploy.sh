@@ -1,133 +1,42 @@
 #!/usr/bin/env bash
-# Build locally → ship to gda-s01:/var/www/flowstep with atomic symlink swap.
-# Usage: ./infra/deploy/deploy.sh [--skip-build] [--seed]
+# Deploy Flowstep to gda-s01:/var/www/flowstep — flat git checkout, matches
+# the rest of the fleet (rhproperties, christos, essentialbali, etc.).
 #
-# Server layout:
-#   /var/www/flowstep/
-#     releases/<sha>/         ← rsync target
-#     current → releases/<sha>/   ← atomic symlink (PM2 cwd, Nginx root)
-#     shared/
-#       .env                  ← PAYLOAD_SECRET, DATABASE_URI, SMTP_*
-#       logs/
-#       media/                ← Payload uploads (symlinked into release)
+# Usage:
+#   ./infra/deploy/deploy.sh         # pull + build + reload
+#   ./infra/deploy/deploy.sh --seed  # also run the idempotent seed
 set -euo pipefail
 
 REMOTE="${REMOTE:-gda-s01}"
-TARGET_DIR="${TARGET_DIR:-/var/www/flowstep}"
-APP_NAME="flowstep-cms"
-SKIP_BUILD=0
-RUN_SEED=0
-for arg in "$@"; do
-  case "$arg" in
-    --skip-build) SKIP_BUILD=1 ;;
-    --seed) RUN_SEED=1 ;;
-    *) echo "Unknown arg: $arg"; exit 2 ;;
-  esac
-done
+TARGET="${TARGET:-/var/www/flowstep}"
+APP="flowstep-cms"
+SEED=0
+[ "${1:-}" = "--seed" ] && SEED=1
 
-cd "$(dirname "$0")/../.."
-REPO_ROOT="$(pwd)"
-SHA="$(git rev-parse --short HEAD 2>/dev/null || echo "manual-$(date +%Y%m%d%H%M%S)")"
-RELEASE="$TARGET_DIR/releases/$SHA"
-
-echo "▶ Deploy $SHA → $REMOTE:$RELEASE"
-
-if [[ "$SKIP_BUILD" -eq 0 ]]; then
-  echo "▶ Building locally"
-  pnpm install --frozen-lockfile=false
-  pnpm --filter @flowstep/web build
-  # CMS is shipped as TS — built on the server, where its env is available.
-fi
-
-ssh "$REMOTE" "mkdir -p $RELEASE $TARGET_DIR/shared/{logs,media}"
-
-echo "▶ Rsyncing payload"
-RSYNC_FLAGS=(
-  -az --delete
-  --exclude='.git'
-  --exclude='node_modules'
-  --exclude='references'
-  --exclude='packages/web/node_modules'
-  --exclude='packages/cms/node_modules'
-  --exclude='packages/cms/dist'
-  --exclude='packages/cms/build'
-  --exclude='packages/cms/media'
-  --exclude='**/.DS_Store'
-  --exclude='**/*.log'
-)
-rsync "${RSYNC_FLAGS[@]}" \
-  package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ecosystem.config.cjs \
-  packages infra \
-  "$REMOTE:$RELEASE/"
-
-# (web/dist is included by the rsync above — no separate step needed.)
-
-echo "▶ Installing prod deps + building CMS on server"
 ssh "$REMOTE" bash -se <<EOF
 set -euo pipefail
-cd "$RELEASE"
+cd "$TARGET"
 
-# Symlink shared resources into the release
-ln -sfn "$TARGET_DIR/shared/.env" "packages/cms/.env"
-ln -sfn "$TARGET_DIR/shared/media" "packages/cms/media"
+git fetch --quiet origin main
+git reset --hard origin/main
 
-pnpm install --prod=false --frozen-lockfile=false
+pnpm install --frozen-lockfile=false 2>&1 | tail -3
 
-# Source .env so PUBLIC_SERVER_URL etc. are available to webpack at admin
-# bundle time (otherwise the baked-in serverURL falls back to localhost).
-set -a
-. "$TARGET_DIR/shared/.env"
-set +a
-pnpm --filter @flowstep/cms build
+# Web is static — Nginx serves dist/ directly.
+pnpm --filter @flowstep/web build 2>&1 | tail -3
 
-# WARNING: Payload v2's migrate:create against an existing DB generates a
-# 'CREATE TABLE IF NOT EXISTS' migration (no-op for existing tables). New
-# COLUMNS on existing tables are NOT picked up. After a schema-changing
-# deploy, manually ALTER affected tables before running 'payload migrate'.
-# See README "Ops" → Migrations for the workflow.
-cd packages/cms
-PAYLOAD_CONFIG_PATH=src/payload.config.ts ./node_modules/.bin/payload migrate 2>&1 | tail -5 || true
-cd ..
+# Backend admin bundle bakes serverURL at build time, so source .env first.
+set -a; . packages/cms/.env; set +a
+pnpm --filter @flowstep/cms build 2>&1 | tail -3
 
-# Atomic symlink swap
-ln -sfn "$RELEASE" "$TARGET_DIR/current.new"
-mv -Tf "$TARGET_DIR/current.new" "$TARGET_DIR/current"
+# Apply any new migrations (write them by hand — see README ops note).
+( cd packages/cms && PAYLOAD_CONFIG_PATH=src/payload.config.ts ./node_modules/.bin/payload migrate 2>&1 | tail -3 ) || true
+
+if [ $SEED -eq 1 ]; then
+  pnpm --filter @flowstep/cms seed 2>&1 | tail -10
+fi
+
+pm2 reload "$APP" --update-env
+
+echo "✓ deploy complete (\$(git rev-parse --short HEAD))"
 EOF
-
-if [[ "$RUN_SEED" -eq 1 ]]; then
-  echo "▶ Running seed (idempotent)"
-  ssh "$REMOTE" "cd $TARGET_DIR/current && pnpm --filter @flowstep/cms seed"
-fi
-
-echo "▶ (Re)starting PM2 app"
-ssh "$REMOTE" bash -se <<EOF
-set -euo pipefail
-cd "$TARGET_DIR/current"
-
-# pm2 reload preserves the original cwd of the process — but since we deploy
-# atomically into a new release dir, we MUST delete + start so PM2 picks up
-# the new cwd (= the new symlink target).
-if pm2 describe "$APP_NAME" >/dev/null 2>&1; then
-  pm2 delete "$APP_NAME"
-fi
-
-# Belt & braces: if anything else is still on :3030 (e.g. an orphan from an
-# interrupted prior run), kill it before starting fresh.
-ORPHAN=\$(ss -tlnp 2>/dev/null | awk '/:3030 / {print \$NF}' | grep -oE 'pid=[0-9]+' | head -1 | cut -d= -f2 || true)
-if [ -n "\$ORPHAN" ]; then
-  echo "  killing orphan node on :3030 (pid \$ORPHAN)"
-  kill "\$ORPHAN" 2>/dev/null || true
-  sleep 2
-fi
-
-pm2 start ecosystem.config.cjs --only "$APP_NAME"
-pm2 save
-EOF
-
-echo "▶ Reloading Nginx"
-ssh "$REMOTE" "sudo nginx -t && sudo nginx -s reload"
-
-echo "▶ Pruning old releases (keep last 5)"
-ssh "$REMOTE" "ls -1dt $TARGET_DIR/releases/*/ | tail -n +6 | xargs -r rm -rf"
-
-echo "✓ Deployed $SHA"
