@@ -134,6 +134,24 @@ The 5% human contribution was **direction, taste, and verification** — the par
 
 ---
 
+## The outcome — and how it compares
+
+What you get out of this 6-hour pipeline: a **well-designed, semi-customised UI** faithful to the brief, paired with a **fully managed Payload CMS** the client can run themselves. That's roughly **60% of a finished product** — every architectural piece in place, every page live, every collection editable, but with stock copy and stock photography that still need a content pass.
+
+Gaia's other AI playbook — the **Figma-to-Site Automation** — pushes further. It takes around **12 hours** end-to-end and ships closer to **85% of a finished product**: brand-true visuals, more deeply customised components, real photography wired in. The trade-off is exactly what you'd expect — twice the time, ~25 more percentage points of polish.
+
+| | This pipeline (Prompt → Flowstep → Coding Partner → Payload) | Gaia Figma-to-Site Automation |
+|---|---|---|
+| **Time to live** | ~6 hours | ~12 hours |
+| **% of finished product** | ~60% | ~85% |
+| **UI** | Well-designed, semi-customised — faithful to brief, light brand work | Brand-true, deeply customised, real photography |
+| **CMS** | Fully managed Payload (admin + API + Postgres) | Fully managed Payload (admin + API + Postgres) |
+| **Best for** | Discovery sprints, internal tools, MVPs, pitch-night demos | Client launches that need final-mile polish before handoff |
+
+Both paths share the same backbone — Payload CMS on the 3PVRTN stack — so a project can start as the 6-hour build and graduate into the 12-hour treatment without rewriting anything. The CMS, the schema, the deploy pattern, and the routes all stay; only the surface gets richer.
+
+---
+
 ## What this proves about AI-native development at Gaia
 
 1. **Stack-anchored prompting is the unlock.** Every generated artifact — the design, the components, the deploy script — was constrained by the 3PVRTN stack from the first prompt. No AI hallucinated a Next.js project or a MongoDB schema, because the prompt didn't allow it.
