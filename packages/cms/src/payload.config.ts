@@ -25,6 +25,22 @@ export default buildConfig({
       titleSuffix: " — Flowstep CMS",
       favicon: "/favicon.svg",
     },
+    // Provide browser-side fallbacks for Node builtins that pnpm hoisting
+    // doesn't auto-shim inside Payload's admin bundle.
+    webpack: (config) => ({
+      ...config,
+      resolve: {
+        ...(config.resolve || {}),
+        fallback: {
+          ...(config.resolve?.fallback || {}),
+          url: false,
+          path: false,
+          fs: false,
+          stream: false,
+          crypto: false,
+        },
+      },
+    }),
   },
   editor: lexicalEditor({}),
   collections: [
