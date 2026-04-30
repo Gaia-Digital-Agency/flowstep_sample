@@ -93,44 +93,25 @@ The 6 disconnected Vite projects landed in this repo's `references/figma-exports
 
 ## What "80% AI" actually means
 
-**AI did:**
-- Wrote the 1,400-line Prompt Builder app (Stage 1 — also AI-built)
-- Generated all 5,100+ lines of frontend page JSX (Stage 2)
-- Scaffolded the Payload backend, all collections, the contact endpoint, the seed script (Stage 3)
-- Scaffolded all infra: PM2 config, Nginx vhost, deploy script, backup script, CI workflow (Stage 3)
-- Provisioned the server: chowned the dir, generated secrets, created the Postgres DB + role, ran migrations, ran seeds, configured Nginx, issued the TLS cert (Stage 3)
-- Iterated when things broke: caught and fixed an ESM/CJS conflict in Payload v2 builds, an `EADDRINUSE` from an orphan node process, a `serverURL` empty-string fallback that Payload coerced to localhost, a Payload v2 `migrate:create` that no-ops new columns on existing tables, a Capistrano-style deploy layout that didn't match the fleet (then flattened it on instruction)
+The percentages are about **volume of typing**, not weight of contribution. Volume tilted heavily to AI; **significance tilted to the human**.
 
-**Human did:**
-- Decided the project should exist
-- Filled in the 52-question form (~10 min)
-- Pasted the prompt into Flowstep (~1 min)
-- Approved the architectural plan before Claude went to YOLO mode
-- Course-corrected mid-build: "DNS is `.online` not `.com`", "fleet uses flat git checkouts not Capistrano", "delete dead code", "match the PNG fidelity"
-- Spotted things the AI missed: a broken Charred Eggplant image URL, a Figma-leftover "Developer note" block on the menu page, the `/admin` 404 (caused by a wrong `serverURL` fallback)
-- Provided credentials and approved server access via Google Cloud IAP
+### What the human owned (the consequential parts)
 
-The 5% human contribution was **direction, taste, and verification** — the parts that benefit most from a person in the loop. Everything else was AI.
+- **Architecture.** Decided the stack would be 3PVRTN, that the CMS would be Payload, that the frontend would be a static SPA served by Nginx (not SSR), that the backend would be CJS-built Express on port 3030. None of those are defaults — each was a deliberate call that shaped every line that followed.
+- **Information flow.** Decided which content lives in the CMS (Branches, MenuItems, FAQs) and which stays hardcoded (Home/About/Services hero copy). Decided that the contact form persists to Postgres before email is wired. Decided the deploy is a flat git checkout, not Capistrano releases.
+- **Quality assurance.** Reviewed every milestone — caught a broken image URL, a leftover developer-note block on the menu page, an admin bundle baking the wrong `serverURL`, a `/admin` 500 nobody else would have noticed. Tested every route in the browser before signing off.
+- **Error watch.** Read PM2 logs alongside the AI, spotted crashloops, identified port-conflict patterns, called out when the bundle hash didn't change after a rebuild.
+- **Steering and guidance.** Course-corrected the AI repeatedly when it reached for over-engineered patterns (releases/current/shared layout, leftover Figma noise, unused collections). Insisted on matching the existing fleet convention. Set hard rules: no bloat, no files over 1500 lines, match what's already on the box.
+- **Test and verification.** Compared rendered routes to the PNG mockups, opened the admin in a browser, submitted a real contact form, ran Lighthouse, audited the file structure.
+- **Final approval.** Decided when each milestone was done, when to commit, when to push, when to flatten the layout, when the build was truly live.
 
----
+### What the AI owned (the execution layer)
 
-## Timeline
+AI did the **volume work end-to-end**: it generated the Prompt Builder, scaffolded the page UIs in Flowstep, and through Claude Code, translated the human's architectural decisions into running code, configured systems, and a deployed environment. That meant doing the typing and the tooling — turning "we want a Payload backend with these collections" into actual collection files, into actual SQL migrations, into an actual admin UI on a TLS-protected URL — without the human having to switch contexts between writing, configuring, and operating.
 
-| Time (GMT+8) | Stage | What happened |
-|---|---|---|
-| 9:00 PM | 1 | Filled in the Prompt Builder questionnaire |
-| 9:15 PM | 2 | Pasted prompt into Flowstep, downloaded 6 page exports |
-| 9:45 PM | 3 | Claude Code session started — recon of `gda-s01`, repo bootstrap |
-| 10:30 PM | 3 | Frontend consolidation complete — single Vite app with 6 routes |
-| 11:30 PM | 3 | Payload CMS scaffolded — collections, contact endpoint, seed script |
-| 11:30 PM | 3 | First deploy to `gda-s01` — pnpm install, schema migrate, seed |
-| 12:30 AM | 3 | TLS issued via certbot, every route 200, admin login working |
-| 1:15 AM | 3 | v1.5 — wired CMS data to BranchesPage, MenuPage, ServicesPage FAQ |
-| 1:45 AM | 3 | Cleanup pass — deleted 27 MB of dead Figma source, stripped 530 lines of Figma `data-id` noise |
-| 2:30 AM | 3 | Flattened server layout to match fleet convention (no Capistrano releases/current/shared) |
-| 3:00 AM | 4 | Final smoke pass — all routes 200, repo and server in sync, docs written |
+Crucially, AI also **absorbed the iteration cost**. When something broke at the framework, runtime, or infrastructure layer — and plenty did — the Coding Partner debugged and recovered in the same session, with the same context, without escalating each one back to the human as a separate ticket. The human's job was to spot when a recovery was off-strategy, not to do the recovery work itself.
 
-**Result**: A production-quality marketing site with admin, persistent contact submissions, schema-driven SEO, automated TLS renewal, and a documented deploy process — built in one evening, by one person + a few AI tools, for the cost of an Anthropic API session and a fresh Let's Encrypt cert.
+The 80/20 split is real but it describes *where the keystrokes went*. The shape of the result — what got built, why, in what order, to what standard — was the human's. Without the architectural calls and the constant QA, the AI would have produced a working but wrong site twice as fast and headed in the wrong direction. With them, it produced a working and right one in six hours.
 
 ---
 
