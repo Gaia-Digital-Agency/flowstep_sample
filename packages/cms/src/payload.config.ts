@@ -13,9 +13,12 @@ import { FAQs } from "./collections/FAQs";
 import { ContactSubmissions } from "./collections/ContactSubmissions";
 
 export default buildConfig({
-  // Empty string → admin uses window.location.origin (relative URLs).
-  // Avoids baking a host into the webpack admin bundle at build time.
-  serverURL: process.env.PUBLIC_SERVER_URL || "",
+  // Hardcoded prod URL as fallback. Payload v2 has an internal fallback to
+  // 'http://localhost:3030' that kicks in when serverURL is falsy — so an
+  // empty string (or undefined) breaks the admin in production. The env var
+  // wins when it's set (e.g. for local dev pointing at localhost:3030).
+  serverURL:
+    process.env.PUBLIC_SERVER_URL || "https://flowstep.gaiada.online",
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),
