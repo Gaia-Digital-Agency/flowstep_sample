@@ -1,0 +1,147 @@
+Design a production-ready website UI for Gaia AI Prompt Test Site using Figma Make.
+
+> **Before submitting:** for best results, paste a screenshot of none into the prompt box. Visual context dramatically improves the output (Figma Make's official prompting guidance).
+
+## Tech stack constraint
+Designs must fit the PostgreSQL, Headless Payload CMS, Python Flow Scripting, ViteJS, ReactJS, TailwindCSS, NodeJS stack.
+Component patterns, form behaviour, and routing should align with this stack:
+  - React functional components, hooks, and React Router conventions
+  - Tailwind utility classes — design tokens expressible as Tailwind config
+  - Vite-friendly asset handling (no heavy build-time transforms)
+  - Content modelled in Headless Payload CMS (collections, globals, blocks)
+  - Forms submit via Node API endpoints; long-running flows handed off to Python Flow scripts
+  - Data persisted in PostgreSQL via Payload
+
+## Component library (use exclusively)
+- Use **shadcn/ui (Radix + Tailwind)** for every interactive primitive.
+- Do not invent new button / input / dialog primitives — extend the library above.
+- Compose page sections from these primitives only; name custom blocks consistently (e.g. `HeroBlock`, `FeatureGrid`, `ContactBlock`).
+
+## Project context
+- Client: Gaia AI Prompt Test Site
+- Industry: Restaurant & Food
+- Existing site status: New build — no current site
+- Site type: Marketing website (multi-page)
+- Primary goal: Build brand awareness
+- Primary audience: Travelers & tourists
+- Geographic market: Local
+- Brand personality: Energetic, bold, confident
+- Tone of voice: Polished & aspirational
+- Benchmark / comparative site: none
+
+## Visual direction
+- Design style: Luxury & elegant
+- Color mood: Soft pastels
+- Primary color direction: Terracotta
+- Accent color direction: Emerald green
+- Typography: Geometric sans (e.g. Space Grotesk)
+- Headline weight: Regular
+- Layout density: Balanced
+- Imagery: Architectural / property photography
+- Iconography: Filled icons
+- Animation: Subtle micro-interactions
+
+## Site structure
+- Top-level page count: 5
+- Navigation: Top horizontal nav
+- Footer: Minimal — copyright + 2–3 links
+
+### Pages (verbatim)
+  - Home
+  - About
+  - Services
+  - Branches
+  - Menu
+
+### Subpage tree (verbatim)
+  - Branch 1, Branch 2, Branch 3
+
+
+## Functionality
+### Must-have features
+  - Contact form
+  - FAQ accordion
+### Forms required
+  - Contact
+- User accounts: None
+- Search: Faceted / filtered search
+### Payments
+  - None
+### Integrations
+  - (none specified)
+### Languages
+  - English
+
+## Tracking & compliance
+### Conversion events to track
+  - Form submissions
+  - Phone number clicks
+### Schema markup types
+  - Product
+### Privacy compliance
+  - (none specified)
+### Social platforms to link
+  - Facebook
+  - TikTok
+  - WhatsApp
+
+## Content & operations
+- Content readiness: Needs full copywriting from scratch
+- Photography / video readiness: Stock photography only
+- Brand assets: Branding to be created as part of project
+- CMS editors expected: 1 (single owner)
+- Hosting preference: Client-managed / existing infrastructure
+
+## Responsive & technical
+- Device priority: Mobile-first responsive
+- Accessibility target: WCAG 2.2 Level AA
+- SEO priority: High — structured data + content depth
+- Performance target: Lighthouse 90+ across the board
+- Project timeline: Under 4 weeks (rapid)
+- Fully responsive across desktop, tablet, and mobile breakpoints
+- 12-column grid, consistent spacing scale (4px base), clear focus states
+- Semantic H1/H2/H3 hierarchy, descriptive alt text placeholders, descriptive section labels
+
+## Component & section guidance
+- Sticky responsive header with main navigation and primary CTA
+- Hero: bold headline, supporting subhead, primary CTA, optional secondary CTA, hero visual aligned with imagery direction above
+- Social proof block: logos, testimonials, or stats near the top of the homepage
+- Feature/value sections: scannable, icon or image + short copy + supporting CTA
+- Detail pages (listings / products / case studies): gallery, key facts, descriptive body, related items, contact / enquiry block
+- Contact: form with name/email/phone/message, supporting info (address, hours, map)
+- Footer aligned with chosen footer depth above
+- Reusable components: buttons (primary / secondary / ghost), cards, form inputs, tags, badges, breadcrumbs, modals
+
+## Style system to define
+- Color palette: primary, secondary, accent, neutrals, success / warning / error — with hex values
+- Typography scale: display, H1–H4, body, small, caption — with line-heights and weights
+- Spacing scale (4px base) and consistent radius / shadow tokens
+- Button states: default, hover, active, disabled, focus
+- All tokens expressed as Tailwind theme config keys
+
+## What to avoid
+  - No infinite scroll on listings
+  - No popup / modal email signup
+  - No autoplay video with sound
+  - No dark patterns / forced consent
+  - No icon-only navigation
+  - No emoji in marketing copy
+  - No AI-generated illustrations
+  - No gradient overload
+
+## Acceptance criteria (definition of done)
+- Visual: matches the visual-direction block above; no patterns from "What to avoid"
+- Component fidelity: every interactive element uses shadcn/ui (Radix + Tailwind)
+- Accessibility: passes WCAG 2.2 Level AA — keyboard navigable, focus-visible, contrast-AA labels
+- Performance: Lighthouse 90+ across all categories
+- SEO: every page has H1, meta title, meta description, descriptive alt text placeholders
+- Responsive: desktop ≥ 1280, tablet ~ 768, mobile ~ 390 frames all delivered
+- Content fit: components accommodate the realistic content lengths implied by the audience and tone
+
+## Deliverables
+- Desktop and mobile frames for every page listed above
+- Subpage frames where defined
+- Style guide frame summarising color, type, spacing, and core components
+- All sections built from reusable components / auto-layout where possible
+
+Keep the result clean, modern, and conversion-focused. Prioritise clarity and visual hierarchy over decoration.

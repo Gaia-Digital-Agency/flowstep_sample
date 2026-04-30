@@ -1,0 +1,33 @@
+{
+  "name": "flowstep",
+  "version": "0.1.0",
+  "description": "Flowstep — Gaia AI Prompt Test Site (PVRTN: Postgres + Payload + Vite + React + Tailwind + Node)",
+  "license": "UNLICENSED",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n cms,web -c cyan,magenta \"pnpm --filter @flowstep/cms dev\" \"pnpm --filter @flowstep/web dev\"",
+    "dev:cms": "pnpm --filter @flowstep/cms dev",
+    "dev:web": "pnpm --filter @flowstep/web dev",
+    "build": "pnpm --filter @flowstep/cms build && pnpm --filter @flowstep/web build",
+    "build:cms": "pnpm --filter @flowstep/cms build",
+    "build:web": "pnpm --filter @flowstep/web build",
+    "start:cms": "pnpm --filter @flowstep/cms start",
+    "lint": "pnpm -r lint",
+    "deploy": "bash infra/deploy/deploy.sh"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "engines": {
+    "node": ">=20.9.0",
+    "pnpm": "^10"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "esbuild",
+      "unrs-resolver"
+    ]
+  }
+}

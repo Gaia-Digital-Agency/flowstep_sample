@@ -1,0 +1,43 @@
+# deps
+node_modules
+.pnpm-store
+
+# build output
+dist
+build
+.next
+.vite
+.turbo
+.payload
+
+# env
+.env
+.env.*
+!.env.example
+
+# logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# editor / OS
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# typescript
+*.tsbuildinfo
+
+# test
+coverage
+
+# uploads (payload media)
+packages/cms/media
+packages/cms/uploads
+
+# references — keep prompt + PDF + Figma source code, exclude heavy PNGs
+references/**/*.png
+references/figma-exports/**/node_modules
+references/figma-exports/**/dist
