@@ -80,6 +80,15 @@ set -a
 set +a
 pnpm --filter @flowstep/cms build
 
+# WARNING: Payload v2's migrate:create against an existing DB generates a
+# 'CREATE TABLE IF NOT EXISTS' migration (no-op for existing tables). New
+# COLUMNS on existing tables are NOT picked up. After a schema-changing
+# deploy, manually ALTER affected tables before running 'payload migrate'.
+# See README "Ops" → Migrations for the workflow.
+cd packages/cms
+PAYLOAD_CONFIG_PATH=src/payload.config.ts ./node_modules/.bin/payload migrate 2>&1 | tail -5 || true
+cd ..
+
 # Atomic symlink swap
 ln -sfn "$RELEASE" "$TARGET_DIR/current.new"
 mv -Tf "$TARGET_DIR/current.new" "$TARGET_DIR/current"

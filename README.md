@@ -53,9 +53,15 @@ Pushes to `git@github.com-gaiada:Gaia-Digital-Agency/flowstep_sample.git`.
 
 - **Logs**: `pm2 logs flowstep-cms` on `gda-s01`. PM2 also writes to `/var/www/flowstep/shared/logs/cms.{out,err}.log`.
 - **DB**: Postgres 18 on `gda-s01`, role `flowstep`, DB `flowstep`, password in `/var/www/flowstep/shared/.env`.
-- **Migrations**: Payload uses drizzle. To apply schema changes after editing collections:
+- **Migrations**: Payload v2 uses drizzle. **Caveat**: `migrate:create` against an existing DB generates `CREATE TABLE IF NOT EXISTS` for every table — which is a no-op for tables that already exist, so **new columns added to existing collections WILL NOT be applied**. Workflow:
   ```bash
-  ssh gda-s01 'cd /var/www/flowstep/current/packages/cms && set -a && source .env && set +a && PAYLOAD_CONFIG_PATH=src/payload.config.ts ./node_modules/.bin/payload migrate:create --skip-empty && PAYLOAD_CONFIG_PATH=src/payload.config.ts ./node_modules/.bin/payload migrate'
+  # 1. New collection (table doesn't exist yet) — migrate:create works fine.
+  cd packages/cms && PAYLOAD_CONFIG_PATH=src/payload.config.ts ./node_modules/.bin/payload migrate:create --skip-empty
+  PAYLOAD_CONFIG_PATH=src/payload.config.ts ./node_modules/.bin/payload migrate
+  
+  # 2. New COLUMN on an existing collection — write the ALTER yourself first:
+  psql -h 127.0.0.1 -U flowstep -d flowstep -c "ALTER TABLE branches ADD COLUMN IF NOT EXISTS image_url varchar;"
+  # then continue with seed/redeploy.
   ```
 - **Backups**: `infra/backup/backup.sh` — installable as a daily cron, optionally pushes to GCS via `BACKUP_BUCKET`.
 - **CI/CD**: `.github/workflows/deploy.yml` — push to `main` redeploys. Requires repo secret `GDA_S01_SSH_KEY` (the matching private key for the `azlan@gda-s01` deploy login).
