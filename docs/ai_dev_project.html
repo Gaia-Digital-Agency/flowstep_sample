@@ -476,16 +476,49 @@
 </section>
 
 <section>
-  <h2>The repeatable playbook</h2>
-  <p>For your next client build:</p>
-  <ol>
-    <li>Fill in the Prompt Builder for the client. ~10 minutes.</li>
-    <li>Paste the generated prompt into Flowstep. ~5 minutes for the AI to scaffold.</li>
-    <li>Hand the Figma exports + the brief to a Claude Code session with shell access to your fleet box.</li>
-    <li>Tell it: <em>"Consolidate, wire Payload CMS for content sections, deploy to <code>&lt;site&gt;.gaiada.online</code> on <code>gda-s01</code>. Match fleet convention."</em></li>
-    <li>Expect to spend an evening watching, redirecting, and verifying. Expect a live site by morning.</li>
-  </ol>
-  <p>Then the engagement actually begins — copywriting, photography, real content modelling, integrations, performance pass. <strong>The plumbing is done in night one.</strong></p>
+  <h2>Operating model</h2>
+  <p>The pipeline is engagement-ready: it compresses what used to be a discovery-and-scaffolding sprint into a single working session, freeing the rest of the timeline for the work that actually differentiates a client deliverable.</p>
+
+  <table>
+    <tr>
+      <th style="width:18%">Phase</th>
+      <th style="width:14%">Owner</th>
+      <th style="width:14%">Duration</th>
+      <th>Output</th>
+    </tr>
+    <tr>
+      <td><strong>Intake</strong></td>
+      <td>Account lead</td>
+      <td>~15 min</td>
+      <td>Completed Prompt Builder questionnaire — captures stack constraints, visual direction, content model, and acceptance criteria in a single structured artifact.</td>
+    </tr>
+    <tr>
+      <td><strong>UI scaffold</strong></td>
+      <td>Flowstep</td>
+      <td>~5 min</td>
+      <td>Page-faithful Vite + React exports for every route in the brief, ready for consolidation.</td>
+    </tr>
+    <tr>
+      <td><strong>Build session</strong></td>
+      <td>Engineer + Coding Partner</td>
+      <td>~5 hr</td>
+      <td>Live site at <code>&lt;client&gt;.gaiada.online</code>: consolidated frontend, Payload collections wired, Postgres provisioned, TLS issued, admin login working, deploy script committed.</td>
+    </tr>
+    <tr>
+      <td><strong>Client engagement</strong></td>
+      <td>Account + creative</td>
+      <td>Remaining timeline</td>
+      <td>Copywriting, photography, real content in the CMS, integrations, performance pass — the work that's worth a human hour.</td>
+    </tr>
+  </table>
+
+  <p>Two operating principles make the model repeatable:</p>
+  <ul>
+    <li><strong>Stack discipline.</strong> Every site uses the same 3PVRTN backbone, the same fleet conventions on <code>gda-s01</code>, the same Payload collection patterns. Engineers move between projects without re-learning anything; the Coding Partner inherits a known shape and stops trying to invent new ones.</li>
+    <li><strong>Human as editor, not typist.</strong> The engineer's contribution shifts from writing boilerplate to making architectural calls, watching for off-strategy moves, and approving milestones. Throughput goes up; the role gets more interesting, not less.</li>
+  </ul>
+
+  <p>The build session is night one. The work that earns the engagement happens in everything after.</p>
 </section>
 
 </main>

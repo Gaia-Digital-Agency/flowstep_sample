@@ -133,6 +133,26 @@ Both paths share the same backbone — Payload CMS on the 3PVRTN stack — so a 
 
 ---
 
+## Operating model
+
+The pipeline is engagement-ready: it compresses what used to be a discovery-and-scaffolding sprint into a single working session, freeing the rest of the timeline for the work that actually differentiates a client deliverable.
+
+| Phase | Owner | Duration | Output |
+|---|---|---|---|
+| **Intake** | Account lead | ~15 min | Completed Prompt Builder questionnaire — captures stack constraints, visual direction, content model, and acceptance criteria in a single structured artifact. |
+| **UI scaffold** | Flowstep | ~5 min | Page-faithful Vite + React exports for every route in the brief, ready for consolidation. |
+| **Build session** | Engineer + Coding Partner | ~5 hr | Live site at `<client>.gaiada.online`: consolidated frontend, Payload collections wired, Postgres provisioned, TLS issued, admin login working, deploy script committed. |
+| **Client engagement** | Account + creative | Remaining timeline | Copywriting, photography, real content in the CMS, integrations, performance pass — the work that's worth a human hour. |
+
+Two operating principles make the model repeatable:
+
+- **Stack discipline.** Every site uses the same 3PVRTN backbone, the same fleet conventions on `gda-s01`, the same Payload collection patterns. Engineers move between projects without re-learning anything; the Coding Partner inherits a known shape and stops trying to invent new ones.
+- **Human as editor, not typist.** The engineer's contribution shifts from writing boilerplate to making architectural calls, watching for off-strategy moves, and approving milestones. Throughput goes up; the role gets more interesting, not less.
+
+The build session is night one. The work that earns the engagement happens in everything after.
+
+---
+
 ## What this proves about AI-native development at Gaia
 
 1. **Stack-anchored prompting is the unlock.** Every generated artifact — the design, the components, the deploy script — was constrained by the 3PVRTN stack from the first prompt. No AI hallucinated a Next.js project or a MongoDB schema, because the prompt didn't allow it.
