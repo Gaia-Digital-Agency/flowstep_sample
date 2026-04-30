@@ -57,11 +57,10 @@ RSYNC_FLAGS=(
 )
 rsync "${RSYNC_FLAGS[@]}" \
   package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ecosystem.config.cjs \
-  packages/ infra/ \
+  packages infra \
   "$REMOTE:$RELEASE/"
 
-# Ship the already-built web dist
-rsync -az --delete packages/web/dist/ "$REMOTE:$RELEASE/packages/web/dist/"
+# (web/dist is included by the rsync above — no separate step needed.)
 
 echo "▶ Installing prod deps + building CMS on server"
 ssh "$REMOTE" bash -se <<EOF
