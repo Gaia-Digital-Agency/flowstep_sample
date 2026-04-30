@@ -1,0 +1,35 @@
+{
+  "name": "@flowstep/cms",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "PAYLOAD_CONFIG_PATH=src/payload.config.ts tsx watch src/server.ts",
+    "build": "PAYLOAD_CONFIG_PATH=src/payload.config.ts payload build && tsc -p tsconfig.json",
+    "start": "PAYLOAD_CONFIG_PATH=dist/payload.config.js node dist/server.js",
+    "seed": "PAYLOAD_CONFIG_PATH=src/payload.config.ts tsx src/seed.ts",
+    "generate:types": "PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:types"
+  },
+  "dependencies": {
+    "@payloadcms/bundler-webpack": "^1.0.9",
+    "@payloadcms/db-postgres": "^0.8.10",
+    "@payloadcms/richtext-lexical": "^0.11.4",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.4.1",
+    "nodemailer": "^6.9.16",
+    "payload": "^2.32.3",
+    "dotenv": "^16.4.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sharp": "^0.32.6",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^24.10.1",
+    "@types/nodemailer": "^6.4.17",
+    "tsx": "^4.20.0",
+    "typescript": "~5.5.4"
+  }
+}
