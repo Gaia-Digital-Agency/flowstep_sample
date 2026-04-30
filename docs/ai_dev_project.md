@@ -2,7 +2,12 @@
 
 **Start**: 9:00 PM GMT+8 · **End**: 2:00 AM GMT+8 · **Total**: ~5 hours · **Human time spent**: small fraction of that — mostly direction, course corrections, and final approvals.
 
-This is the story of how a marketing site (https://flowstep.gaiada.online) went from "blank server + a prompt" to "live, CMS-driven, HTTPS, Lighthouse-tested" — built ~95% by AI tooling, in one evening, by Gaia Digital Agency.
+**Live URLs**:
+- 🛠 Prompt Builder (Stage 1): https://gaia-digital-agency.github.io/aiprompt_web/
+- 🌐 Final site (Stage 4): https://flowstep.gaiada.online/
+- 🔐 Admin: https://flowstep.gaiada.online/admin
+
+This is the story of how a marketing site went from "blank server + a prompt" to "live, CMS-driven, HTTPS, Lighthouse-tested" — built ~95% by AI tooling, in one evening, by Gaia Digital Agency.
 
 ---
 
