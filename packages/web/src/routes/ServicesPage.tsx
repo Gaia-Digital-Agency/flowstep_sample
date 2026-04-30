@@ -1,4 +1,10 @@
 import { usePageMeta } from "@/hooks/usePageMeta";
+import {
+  useCms,
+  richTextToPlain,
+  type PayloadList,
+  type FaqDoc,
+} from "@/hooks/useCms";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import {
   ArrowRight,
@@ -21,6 +27,10 @@ export default function ServicesPage() {
     description: "Private rooms, events, and bespoke menus tailored for travellers and locals alike.",
     canonical: "https://flowstep.gaiada.online/services",
   });
+  const { data: faqData, loading: faqLoading, error: faqError } = useCms<
+    PayloadList<FaqDoc>
+  >("/api/faqs?limit=50&sort=order");
+  const faqs = faqData?.docs ?? [];
   return (
     <>
       <main>
@@ -464,136 +474,42 @@ export default function ServicesPage() {
                 type="single"
                 data-id="f7be88ef-93f5-56d4-b38f-ccc9189a60e1"
               >
-                <AccordionItem
-                  className="border-black/1 border-t-0 border-r-0 border-b-1 border-l-0 border-solid"
-                  style={{ borderColor: "#FAF7F4" }}
-                  value="item-1"
-                  data-id="19595d9e-61bd-5f73-91a6-6eb99020ac18"
-                >
-                  <AccordionTrigger
-                    className="font-medium text-base leading-6 py-4"
-                    style={{ color: "#1A1A1A" }}
-                    data-id="2d810c63-9f25-5c31-bc5d-e9d343f137f4"
+                {faqLoading && (
+                  <p className="text-sm text-[#1F1B17]/50 py-4">Loading FAQs…</p>
+                )}
+                {faqError && (
+                  <p className="text-sm text-red-600 py-4">
+                    Could not load FAQs. Please refresh.
+                  </p>
+                )}
+                {!faqLoading && !faqError && faqs.length === 0 && (
+                  <p className="text-sm text-[#1F1B17]/50 py-4">No FAQs yet.</p>
+                )}
+                {faqs.map((faq, idx) => (
+                  <AccordionItem
+                    key={faq.id}
+                    className="border-black/1 border-t-0 border-r-0 border-b-1 border-l-0 border-solid"
+                    style={{ borderColor: "#FAF7F4" }}
+                    value={`faq-${faq.id}`}
                   >
-                    How do I make a reservation?
-                  </AccordionTrigger>
-                  <AccordionContent
-                    className="leading-relaxed text-sm leading-5 pb-4"
-                    style={{ color: "#4A4A4A" }}
-                    data-id="e280e1bb-0c93-5930-b5e9-c9d042151ad5"
-                  >
-                    Reservations can be made online via our booking widget, by
-                    phone, or through the Reserve a Table button.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem
-                  className="border-black/1 border-t-0 border-r-0 border-b-1 border-l-0 border-solid"
-                  style={{ borderColor: "#FAF7F4" }}
-                  value="item-2"
-                  data-id="18d91d27-2ac0-5b4d-b213-5b6319c86cbe"
-                >
-                  <AccordionTrigger
-                    className="font-medium text-base leading-6 py-4"
-                    style={{ color: "#1A1A1A" }}
-                    data-id="da0810de-dc1d-563a-a343-829c871d4cf4"
-                  >
-                    Do you accommodate dietary requirements?
-                  </AccordionTrigger>
-                  <AccordionContent
-                    className="leading-relaxed text-sm leading-5 pb-4"
-                    style={{ color: "#4A4A4A" }}
-                    data-id="709d3101-53e8-5d3c-96d4-a75742a95f76"
-                  >
-                    Yes — please let us know in advance and our chefs will craft
-                    alternatives for vegan, gluten-free and allergy needs.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem
-                  className="border-black/1 border-t-0 border-r-0 border-b-1 border-l-0 border-solid"
-                  style={{ borderColor: "#FAF7F4" }}
-                  value="item-3"
-                  data-id="cc7ada48-e35e-5ff3-a35f-0101acccda19"
-                >
-                  <AccordionTrigger
-                    className="font-medium text-base leading-6 py-4"
-                    style={{ color: "#1A1A1A" }}
-                    data-id="404512d9-1c7c-5649-b0fe-ede5a4f3a7e1"
-                  >
-                    How do I book a private event?
-                  </AccordionTrigger>
-                  <AccordionContent
-                    className="leading-relaxed text-sm leading-5 pb-4"
-                    style={{ color: "#4A4A4A" }}
-                    data-id="964929e0-9610-5669-abd2-af8fd5f4d20f"
-                  >
-                    Private events can be enquired through our contact form. Our
-                    events manager will respond within 24 hours.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem
-                  className="border-black/1 border-t-0 border-r-0 border-b-1 border-l-0 border-solid"
-                  style={{ borderColor: "#FAF7F4" }}
-                  value="item-4"
-                  data-id="413d09aa-4c20-54e0-b73a-744e7f627d8c"
-                >
-                  <AccordionTrigger
-                    className="font-medium text-base leading-6 py-4"
-                    style={{ color: "#1A1A1A" }}
-                    data-id="8f16b9b1-0f21-5016-b839-d32bcaf81d52"
-                  >
-                    What is your delivery radius?
-                  </AccordionTrigger>
-                  <AccordionContent
-                    className="leading-relaxed text-sm leading-5 pb-4"
-                    style={{ color: "#4A4A4A" }}
-                    data-id="c5e9a203-a19b-585e-a3d3-f3190f41c887"
-                  >
-                    We deliver within a 10 km radius of each branch. Catering
-                    orders may extend further with prior arrangement.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem
-                  className="border-black/1 border-t-0 border-r-0 border-b-1 border-l-0 border-solid"
-                  style={{ borderColor: "#FAF7F4" }}
-                  value="item-5"
-                  data-id="fd55e96a-8436-5ab7-8185-98c10a7f49f4"
-                >
-                  <AccordionTrigger
-                    className="font-medium text-base leading-6 py-4"
-                    style={{ color: "#1A1A1A" }}
-                    data-id="b55c3e9c-c928-5acc-a6ac-0b462c44f3c5"
-                  >
-                    Is there a dress code?
-                  </AccordionTrigger>
-                  <AccordionContent
-                    className="leading-relaxed text-sm leading-5 pb-4"
-                    style={{ color: "#4A4A4A" }}
-                    data-id="ecbff035-edab-5c16-b52e-5218ca538ac6"
-                  >
-                    Smart casual is recommended for dinner service. The Chef's
-                    Table requests business attire.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem
-                  value="item-6"
-                  data-id="48ca4f63-2a91-54a3-bdc2-36e31e15ac61"
-                >
-                  <AccordionTrigger
-                    className="font-medium text-base leading-6 py-4"
-                    style={{ color: "#1A1A1A" }}
-                    data-id="c6bc2ce2-4f93-5254-b789-d231e06bff2c"
-                  >
-                    Do you offer gift vouchers?
-                  </AccordionTrigger>
-                  <AccordionContent
-                    className="leading-relaxed text-sm leading-5 pb-4"
-                    style={{ color: "#4A4A4A" }}
-                    data-id="b7cfaa8b-a4b8-55ab-bf92-ad33a265a5b2"
-                  >
-                    Yes — digital and printed vouchers are available in any
-                    denomination, redeemable across all branches.
-                  </AccordionContent>
-                </AccordionItem>
+                    <AccordionTrigger
+                      className="font-medium text-base leading-6 py-4"
+                      style={{ color: "#1A1A1A" }}
+                    >
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent
+                      className="leading-relaxed text-sm leading-5 pb-4"
+                      style={{ color: "#4A4A4A" }}
+                    >
+                      {richTextToPlain(faq.answer).split("\n\n").map((para, i) => (
+                        <p key={i} className={i > 0 ? "mt-2" : ""}>
+                          {para}
+                        </p>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
               </Accordion>
             </div>
           </div>

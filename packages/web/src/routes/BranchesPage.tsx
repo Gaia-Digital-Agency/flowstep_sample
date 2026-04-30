@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useCms, type PayloadList, type BranchDoc } from "@/hooks/useCms";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -17,12 +19,86 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
+function BranchCard({ branch }: { branch: BranchDoc }) {
+  const img = branch.imageUrl || branch.image?.url;
+  return (
+    <Card className="border-neutral-200 border-0 border-solid p-0 gap-0 overflow-hidden">
+      <div className="relative w-full h-44 overflow-hidden">
+        {img ? (
+          <img
+            alt={`${branch.name} exterior`}
+            className="object-cover w-full h-full"
+            src={img}
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full" style={{ backgroundColor: "#E8E2DC" }} />
+        )}
+      </div>
+      <CardContent className="flex p-6 flex-col gap-4">
+        <div className="flex justify-between items-start gap-2">
+          <h2 className="text-xl leading-7 tracking-tight">{branch.name}</h2>
+          <Badge className="text-white" style={{ backgroundColor: "#2D6A4F" }}>
+            Open
+          </Badge>
+        </div>
+        <div className="flex flex-col gap-1">
+          <div className="text-neutral-500 text-sm leading-5 flex items-center gap-2">
+            <MapPin className="size-4" style={{ color: "#2D6A4F" }} />
+            <span>
+              {branch.address}
+              {branch.city ? `, ${branch.city}` : ""}
+            </span>
+          </div>
+          {branch.hours && (
+            <div className="text-neutral-500 text-sm leading-5 flex items-center gap-2">
+              <Clock className="size-4" style={{ color: "#2D6A4F" }} />
+              <span>{branch.hours}</span>
+            </div>
+          )}
+        </div>
+        {branch.tagline && (
+          <p className="leading-relaxed text-neutral-950/80 text-sm leading-5">
+            {branch.tagline}
+          </p>
+        )}
+        <div className="flex pt-2 items-center gap-2">
+          <Button asChild className="text-white flex-1" style={{ backgroundColor: "#C4714F" }}>
+            <Link to={`/branches/${branch.slug}`}>View Branch</Link>
+          </Button>
+          <Button
+            className="flex-1"
+            style={{ borderColor: "#2D6A4F", color: "#2D6A4F" }}
+            variant="outline"
+            asChild
+          >
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                `${branch.name} ${branch.address}`,
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Navigation className="size-4" />
+              Directions
+            </a>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function BranchesPage() {
   usePageMeta({
     title: "Our Branches — Three locations, one Gaia AI",
     description: "Find Gaia AI across three signature branches, each with its own character and view.",
     canonical: "https://flowstep.gaiada.online/branches",
   });
+  const { data, loading, error } = useCms<PayloadList<BranchDoc>>(
+    "/api/branches?limit=20&sort=name",
+  );
+  const branches = data?.docs ?? [];
   return (
     <>
       <main>
@@ -159,318 +235,24 @@ export default function BranchesPage() {
             className="grid grid-cols-3 pb-12 gap-6"
             data-id="57cf94c1-1b17-5fd3-a347-e8ed5dbf9bb0"
           >
-            <Card
-              className="border-neutral-200 border-0 border-solid p-0 gap-0 overflow-hidden"
-              data-id="178e1dcd-a66e-5901-aae2-55dc22cecea9"
-            >
-              <div
-                className="relative w-full h-44 overflow-hidden"
-                data-id="edbfe877-e732-538e-be50-bbfe2489c9ad"
-              >
-                <img
-                  alt="Gaia Branch 1 exterior"
-                  className="object-cover w-full h-full"
-                  data-authorname="Unsplash"
-                  data-authorurl="https://unsplash.com"
-                  data-photoid="a"
-                  src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
-                  data-id="88c7734d-3743-5e17-80ee-6e2f9e87613a"
-                />
+            {loading && (
+              <div className="col-span-3 text-center text-sm text-[#1F1B17]/50 py-12">
+                Loading branches…
               </div>
-              <CardContent
-                className="flex p-6 flex-col gap-4"
-                data-id="1c1c1c02-7970-56ea-ac33-3b3323965e66"
-              >
-                <div
-                  className="flex justify-between items-start gap-2"
-                  data-id="3ccd9084-a469-52f2-9edc-f4dc9c1e0efd"
-                >
-                  <h2
-                    className="text-xl leading-7 tracking-tight"
-                    data-id="9efbbc77-5b72-58af-9a12-eef843267a38"
-                  >
-                    Branch 1 — City Centre
-                  </h2>
-                  <Badge
-                    className="text-white"
-                    style={{ backgroundColor: "#2D6A4F" }}
-                    data-id="870288ee-22f8-5e9c-910b-aed6a13c4ce0"
-                  >
-                    Open
-                  </Badge>
-                </div>
-                <div
-                  className="flex flex-col gap-1"
-                  data-id="98a0a33a-7a76-5b79-8262-56542ec32298"
-                >
-                  <div
-                    className="text-neutral-500 text-sm leading-5 flex items-center gap-2"
-                    data-id="1cb6bf06-0dac-50a3-bbee-cc88ff148185"
-                  >
-                    <MapPin
-                      className="size-4"
-                      style={{ color: "#2D6A4F" }}
-                      data-id="72a339b1-eb93-5acb-ad1b-0c077ab52f6c"
-                    />
-                    <span data-id="a8db7716-1b10-5ce8-9b14-99111003339d">
-                      14 Market Square, Central District
-                    </span>
-                  </div>
-                  <div
-                    className="text-neutral-500 text-sm leading-5 flex items-center gap-2"
-                    data-id="7d99d106-0e1f-5758-a874-a511a2a7691b"
-                  >
-                    <Clock
-                      className="size-4"
-                      style={{ color: "#2D6A4F" }}
-                      data-id="a7391461-8470-504d-852f-92d05a18dd5f"
-                    />
-                    <span data-id="4668f089-9ee8-5081-8c65-88a1acf7998c">
-                      Mon–Sun · 11:00 – 23:00
-                    </span>
-                  </div>
-                </div>
-                <p
-                  className="leading-relaxed text-neutral-950/80 text-sm leading-5"
-                  data-id="fdc9527f-9b61-598a-987b-ed78f149dd6f"
-                >
-                  A vibrant flagship in the heart of downtown, blending bold
-                  flavours with confident contemporary design.
-                </p>
-                <div
-                  className="flex pt-2 items-center gap-2"
-                  data-id="9519b556-040d-5e6d-846a-5cbb9d0ac1d6"
-                >
-                  <Button
-                    className="text-white flex-1"
-                    style={{ backgroundColor: "#C4714F" }}
-                    data-id="0c9d61e6-afa3-5995-9763-cdbaa8a853df"
-                  >
-                    View Branch
-                  </Button>
-                  <Button
-                    className="flex-1"
-                    style={{ borderColor: "#2D6A4F", color: "#2D6A4F" }}
-                    variant="outline"
-                    data-id="f4332bc4-31f8-5fbb-876b-92c86a4505e4"
-                  >
-                    <Navigation
-                      className="size-4"
-                      data-id="07264727-b486-5c7c-944b-d97b85903536"
-                    />
-                    Directions
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-            <Card
-              className="border-neutral-200 border-0 border-solid p-0 gap-0 overflow-hidden"
-              data-id="d1684057-ee9f-59f6-844d-7317f8f569f2"
-            >
-              <div
-                className="relative w-full h-44 overflow-hidden"
-                data-id="9506d146-34d6-590f-9a00-e189c8a9442f"
-              >
-                <img
-                  alt="Gaia Branch 2 exterior"
-                  className="object-cover w-full h-full"
-                  data-authorname="Unsplash"
-                  data-authorurl="https://unsplash.com"
-                  data-photoid="b"
-                  src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
-                  data-id="39cac120-4651-5f4d-befd-4d7321cfa4c2"
-                />
+            )}
+            {error && (
+              <div className="col-span-3 text-center text-sm text-red-600 py-12">
+                Could not load branches. Please refresh.
               </div>
-              <CardContent
-                className="flex p-6 flex-col gap-4"
-                data-id="158475b8-fdb2-5e49-9e19-c00e5a4b6b24"
-              >
-                <div
-                  className="flex justify-between items-start gap-2"
-                  data-id="071faf2b-4f72-5ec8-8eba-7c6ce3731f59"
-                >
-                  <h2
-                    className="text-xl leading-7 tracking-tight"
-                    data-id="2cd93401-19d3-5e21-8dde-99e3ebaf4e99"
-                  >
-                    Branch 2 — Waterfront
-                  </h2>
-                  <Badge
-                    className="text-white"
-                    style={{ backgroundColor: "#2D6A4F" }}
-                    data-id="93356c98-c247-5beb-9175-f55e0d3b438a"
-                  >
-                    Open
-                  </Badge>
-                </div>
-                <div
-                  className="flex flex-col gap-1"
-                  data-id="5a679156-2708-5484-ac5c-cdb3a1c4a581"
-                >
-                  <div
-                    className="text-neutral-500 text-sm leading-5 flex items-center gap-2"
-                    data-id="cce182e2-aee1-5e0c-8f17-62caf3bdd437"
-                  >
-                    <MapPin
-                      className="size-4"
-                      style={{ color: "#2D6A4F" }}
-                      data-id="5fbc957c-7626-59f4-964b-b2238b1938e0"
-                    />
-                    <span data-id="b0f3f28e-ea6f-59f1-9dbe-1b96687627d7">
-                      27 Harbour Promenade, Marina Bay
-                    </span>
-                  </div>
-                  <div
-                    className="text-neutral-500 text-sm leading-5 flex items-center gap-2"
-                    data-id="c00b6ae3-5cb9-567e-bdb1-18ac52b11558"
-                  >
-                    <Clock
-                      className="size-4"
-                      style={{ color: "#2D6A4F" }}
-                      data-id="550f1c87-9e4b-54c1-9ef5-d8fe1263743a"
-                    />
-                    <span data-id="250c13b8-2214-55d0-9d3e-bb27ad21de67">
-                      Mon–Sun · 12:00 – 00:00
-                    </span>
-                  </div>
-                </div>
-                <p
-                  className="leading-relaxed text-neutral-950/80 text-sm leading-5"
-                  data-id="c73ce630-82bc-5ca4-93e9-7552cfa499c7"
-                >
-                  Sweeping harbour views and a refined, airy terrace make this
-                  our most aspirational seaside destination.
-                </p>
-                <div
-                  className="flex pt-2 items-center gap-2"
-                  data-id="37c84814-fcac-5497-af7e-53728ab1f732"
-                >
-                  <Button
-                    className="text-white flex-1"
-                    style={{ backgroundColor: "#C4714F" }}
-                    data-id="26e7a02a-0d9c-5218-a0db-3a26615a368b"
-                  >
-                    View Branch
-                  </Button>
-                  <Button
-                    className="flex-1"
-                    style={{ borderColor: "#2D6A4F", color: "#2D6A4F" }}
-                    variant="outline"
-                    data-id="757d9f69-c29c-5014-82ba-d359841f60f2"
-                  >
-                    <Navigation
-                      className="size-4"
-                      data-id="1752ffbf-6618-555d-a8e5-dea4be7b38dd"
-                    />
-                    Directions
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-            <Card
-              className="border-neutral-200 border-0 border-solid p-0 gap-0 overflow-hidden"
-              data-id="900dbd62-8d8f-596d-b7d4-b81dd772b1f8"
-            >
-              <div
-                className="relative w-full h-44 overflow-hidden"
-                data-id="632c5c77-1b3a-54d4-96d3-47fd178f50a6"
-              >
-                <img
-                  alt="Gaia Branch 3 exterior"
-                  className="object-cover w-full h-full"
-                  data-authorname="Unsplash"
-                  data-authorurl="https://unsplash.com"
-                  data-photoid="c"
-                  src="https://images.unsplash.com/photo-1559339352-11d035aa65de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
-                  data-id="2e3ba1b5-7a84-5495-a10d-90fa74562d27"
-                />
+            )}
+            {!loading && !error && branches.length === 0 && (
+              <div className="col-span-3 text-center text-sm text-[#1F1B17]/50 py-12">
+                No branches yet.
               </div>
-              <CardContent
-                className="flex p-6 flex-col gap-4"
-                data-id="3a6c1bde-ad51-5f07-bd57-0792f09dd8f3"
-              >
-                <div
-                  className="flex justify-between items-start gap-2"
-                  data-id="98503649-2cb0-548d-86a4-f2ff6548c885"
-                >
-                  <h2
-                    className="text-xl leading-7 tracking-tight"
-                    data-id="2b16a6e8-0480-56a2-85cf-92dd321ff4e6"
-                  >
-                    Branch 3 — Heritage Quarter
-                  </h2>
-                  <Badge
-                    className="text-white"
-                    style={{ backgroundColor: "#2D6A4F" }}
-                    data-id="2b5dd51e-e514-553a-8a8f-49ab45ab1072"
-                  >
-                    Open
-                  </Badge>
-                </div>
-                <div
-                  className="flex flex-col gap-1"
-                  data-id="c0238bff-975a-5d97-8629-1615b8bf00eb"
-                >
-                  <div
-                    className="text-neutral-500 text-sm leading-5 flex items-center gap-2"
-                    data-id="e5be9bf5-4d74-5798-846b-d426c7babb0e"
-                  >
-                    <MapPin
-                      className="size-4"
-                      style={{ color: "#2D6A4F" }}
-                      data-id="316da04b-09a6-5983-9f56-d96c687416ce"
-                    />
-                    <span data-id="546029f0-4cc4-5158-a3a6-ea304fd07212">
-                      9 Old Stone Lane, Heritage Quarter
-                    </span>
-                  </div>
-                  <div
-                    className="text-neutral-500 text-sm leading-5 flex items-center gap-2"
-                    data-id="08c897c3-d9e1-5f0e-87a8-a2e8227fe920"
-                  >
-                    <Clock
-                      className="size-4"
-                      style={{ color: "#2D6A4F" }}
-                      data-id="3c099f9c-51aa-54a2-bc77-5a912efb38da"
-                    />
-                    <span data-id="fc6868a6-5c84-5b27-94ad-bb1dd6d9a681">
-                      Tue–Sun · 17:00 – 23:00
-                    </span>
-                  </div>
-                </div>
-                <p
-                  className="leading-relaxed text-neutral-950/80 text-sm leading-5"
-                  data-id="bed00d67-9423-5a36-a26c-d8b6a8ee58d6"
-                >
-                  Set in a restored colonial villa, this intimate venue pairs
-                  heritage architecture with modern, polished hospitality.
-                </p>
-                <div
-                  className="flex pt-2 items-center gap-2"
-                  data-id="fa89231f-c6bc-579c-be23-3e71448f8ba5"
-                >
-                  <Button
-                    className="text-white flex-1"
-                    style={{ backgroundColor: "#C4714F" }}
-                    data-id="60612308-9377-5b9f-92da-e100d04bceea"
-                  >
-                    View Branch
-                  </Button>
-                  <Button
-                    className="flex-1"
-                    style={{ borderColor: "#2D6A4F", color: "#2D6A4F" }}
-                    variant="outline"
-                    data-id="f1dd8ec7-b4f8-5d03-bcc2-1dc11295db75"
-                  >
-                    <Navigation
-                      className="size-4"
-                      data-id="7d386dd5-938d-5ceb-b7b9-cd23ab27bd1c"
-                    />
-                    Directions
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            )}
+            {branches.map((b) => (
+              <BranchCard key={b.id} branch={b} />
+            ))}
           </section>
           <section
             className="flex pb-12 flex-col gap-4"

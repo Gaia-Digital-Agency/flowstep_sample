@@ -29,6 +29,11 @@ export const Branches: CollectionConfig = {
       ],
     },
     { name: "image", type: "upload", relationTo: "media" },
+    {
+      name: "imageUrl",
+      type: "text",
+      admin: { description: "External image URL (used when no Media upload is set; useful for stock photo URLs)." },
+    },
     { name: "gallery", type: "array", fields: [{ name: "image", type: "upload", relationTo: "media", required: true }] },
     { name: "description", type: "richText" },
   ],

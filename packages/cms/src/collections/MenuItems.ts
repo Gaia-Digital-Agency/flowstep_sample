@@ -32,6 +32,11 @@ export const MenuItems: CollectionConfig = {
     { name: "currency", type: "text", defaultValue: "MYR" },
     { name: "image", type: "upload", relationTo: "media" },
     {
+      name: "imageUrl",
+      type: "text",
+      admin: { description: "External image URL — used when no Media upload is set." },
+    },
+    {
       name: "tags",
       type: "select",
       hasMany: true,
