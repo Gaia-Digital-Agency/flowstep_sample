@@ -2,7 +2,6 @@
   "name": "@flowstep/cms",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "main": "dist/server.js",
   "scripts": {
     "dev": "PAYLOAD_CONFIG_PATH=src/payload.config.ts tsx watch src/server.ts",

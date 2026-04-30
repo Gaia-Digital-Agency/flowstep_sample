@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import rateLimit from "express-rate-limit";
 import payload from "payload";
-import { contactHandler } from "./endpoints/contact.js";
+import { contactHandler } from "./endpoints/contact";
 
 const PORT = Number(process.env.PORT || 3030);
 

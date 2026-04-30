@@ -1,20 +1,16 @@
 import path from "path";
-import { fileURLToPath } from "url";
 import { buildConfig } from "payload/config";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { webpackBundler } from "@payloadcms/bundler-webpack";
 
-import { Users } from "./collections/Users.js";
-import { Media } from "./collections/Media.js";
-import { Pages } from "./collections/Pages.js";
-import { Branches } from "./collections/Branches.js";
-import { MenuItems } from "./collections/MenuItems.js";
-import { FAQs } from "./collections/FAQs.js";
-import { ContactSubmissions } from "./collections/ContactSubmissions.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { Users } from "./collections/Users";
+import { Media } from "./collections/Media";
+import { Pages } from "./collections/Pages";
+import { Branches } from "./collections/Branches";
+import { MenuItems } from "./collections/MenuItems";
+import { FAQs } from "./collections/FAQs";
+import { ContactSubmissions } from "./collections/ContactSubmissions";
 
 export default buildConfig({
   serverURL: process.env.PUBLIC_SERVER_URL || "http://localhost:3030",
