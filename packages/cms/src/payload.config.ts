@@ -6,7 +6,6 @@ import { webpackBundler } from "@payloadcms/bundler-webpack";
 
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
-import { Pages } from "./collections/Pages";
 import { Branches } from "./collections/Branches";
 import { MenuItems } from "./collections/MenuItems";
 import { FAQs } from "./collections/FAQs";
@@ -47,7 +46,6 @@ export default buildConfig({
   collections: [
     Users,
     Media,
-    Pages,
     Branches,
     MenuItems,
     FAQs,
