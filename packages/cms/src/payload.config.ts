@@ -13,7 +13,9 @@ import { FAQs } from "./collections/FAQs";
 import { ContactSubmissions } from "./collections/ContactSubmissions";
 
 export default buildConfig({
-  serverURL: process.env.PUBLIC_SERVER_URL || "http://localhost:3030",
+  // Empty string → admin uses window.location.origin (relative URLs).
+  // Avoids baking a host into the webpack admin bundle at build time.
+  serverURL: process.env.PUBLIC_SERVER_URL || "",
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),

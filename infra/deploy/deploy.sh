@@ -72,6 +72,12 @@ ln -sfn "$TARGET_DIR/shared/.env" "packages/cms/.env"
 ln -sfn "$TARGET_DIR/shared/media" "packages/cms/media"
 
 pnpm install --prod=false --frozen-lockfile=false
+
+# Source .env so PUBLIC_SERVER_URL etc. are available to webpack at admin
+# bundle time (otherwise the baked-in serverURL falls back to localhost).
+set -a
+. "$TARGET_DIR/shared/.env"
+set +a
 pnpm --filter @flowstep/cms build
 
 # Atomic symlink swap
