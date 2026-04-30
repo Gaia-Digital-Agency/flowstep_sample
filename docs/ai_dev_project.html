@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flowstep — A 5-Hour AI-Native Build Story · Gaia Digital Agency</title>
+<meta name="description" content="How a 4-stage AI pipeline (Prompt Builder → Figma Make → Claude Code → live site) scaffolded a production marketing website on the 3PVRTN stack in one evening." />
+<style>
+  :root {
+    --navy: #1B2845;
+    --yellow: #F4CA4F;
+    --cream: #F5F4F0;
+    --terracotta: #C4714F;
+    --emerald: #2D6A4F;
+    --ink: #1F1B17;
+    --muted: #5C5247;
+    --line: #E8E2DC;
+    --paper: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  header.hero {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 4rem 1.5rem 3.5rem;
+    text-align: center;
+    border-bottom: 6px solid var(--yellow);
+  }
+  .hero .kicker {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    line-height: 1.15;
+    margin: 0 0 0.6rem;
+    letter-spacing: -0.01em;
+  }
+  .hero .lede {
+    max-width: 720px;
+    margin: 0 auto;
+    color: rgba(245, 244, 240, 0.85);
+    font-size: 1.05rem;
+  }
+  .hero .stat-row {
+    display: flex;
+    justify-content: center;
+    gap: 2.2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat .num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--yellow);
+    display: block;
+    line-height: 1;
+  }
+  .stat .lbl {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245, 244, 240, 0.7);
+  }
+  .links {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  .links a {
+    color: var(--navy);
+    background: var(--cream);
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 2px solid var(--yellow);
+    transition: transform 0.15s;
+  }
+  .links a:hover { transform: translateY(-1px); }
+
+  main {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  section { margin-bottom: 3.5rem; }
+  h2 {
+    font-size: 1.7rem;
+    color: var(--navy);
+    border-left: 4px solid var(--yellow);
+    padding-left: 0.8rem;
+    margin: 0 0 1rem;
+  }
+  h3 {
+    font-size: 1.15rem;
+    color: var(--terracotta);
+    margin: 1.5rem 0 0.5rem;
+  }
+  p { margin: 0 0 1rem; }
+  a { color: var(--terracotta); }
+  a:hover { color: var(--navy); }
+  strong { color: var(--navy); }
+
+  figure {
+    margin: 1.5rem 0 2rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: var(--cream);
+  }
+  figure figcaption {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    background: #FAF7F4;
+    border-top: 1px solid var(--line);
+  }
+
+  .pipeline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.8rem;
+    margin: 1.5rem 0;
+  }
+  .stage {
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-top: 4px solid var(--yellow);
+    padding: 1rem;
+    border-radius: 6px;
+    position: relative;
+  }
+  .stage .num {
+    background: var(--navy);
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+  .stage h4 { margin: 0 0 0.4rem; color: var(--navy); font-size: 1rem; }
+  .stage p { margin: 0; font-size: 0.85rem; color: var(--muted); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 1.5rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+    vertical-align: top;
+  }
+  th {
+    background: var(--navy);
+    color: var(--cream);
+    font-weight: 600;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  .callout {
+    background: var(--paper);
+    border-left: 4px solid var(--terracotta);
+    padding: 1rem 1.2rem;
+    margin: 1.5rem 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .callout strong { color: var(--terracotta); }
+
+  .takeaways {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 2rem 1.5rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+  }
+  .takeaways h2 {
+    color: var(--yellow);
+    border-color: var(--yellow);
+  }
+  .takeaways ol {
+    padding-left: 1.2rem;
+  }
+  .takeaways li {
+    margin-bottom: 0.8rem;
+    color: rgba(245, 244, 240, 0.92);
+  }
+  .takeaways strong { color: var(--yellow); }
+
+  footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+  }
+  footer a { color: var(--navy); }
+
+  code {
+    background: rgba(0,0,0,0.06);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.88em;
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="kicker">Gaia Digital Agency · AI-Native Build Story</div>
+  <h1>From a Prompt to a Live Site in 5 Hours</h1>
+  <p class="lede">A four-stage AI pipeline took a marketing website from blank server to production — UI scaffolded by Figma Make, finished by Claude Code on the modern <strong style="color:var(--yellow)">3PVRTN</strong> stack with Payload CMS in the back office.</p>
+  <div class="stat-row">
+    <div class="stat"><span class="num">5h</span><span class="lbl">Total time</span></div>
+    <div class="stat"><span class="num">~95%</span><span class="lbl">AI-built</span></div>
+    <div class="stat"><span class="num">6</span><span class="lbl">Routes live</span></div>
+    <div class="stat"><span class="num">14</span><span class="lbl">DB tables</span></div>
+  </div>
+  <div class="links">
+    <a href="https://gaia-digital-agency.github.io/aiprompt_web/" target="_blank" rel="noreferrer">🛠 Prompt Builder</a>
+    <a href="https://flowstep.gaiada.online/" target="_blank" rel="noreferrer">🌐 Live Site</a>
+    <a href="https://flowstep.gaiada.online/admin" target="_blank" rel="noreferrer">🔐 Admin</a>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <h2>The story, in one paragraph</h2>
+  <p>At <strong>9:00 PM GMT+8</strong> on a Wednesday evening, a Gaia operator opened a static web app and answered 52 dropdown questions. The app — itself AI-built — emitted a structured prompt anchored to Gaia's 3PVRTN stack. They pasted it into Figma Make, which produced six pixel-faithful Vite + React projects. Those landed in a working folder, and Claude Code took over: consolidating the six exports into one monorepo, scaffolding a Payload CMS backend, provisioning Postgres, deploying to a multisite Nginx + PM2 server, issuing TLS via certbot, and iterating until the marketing site was production-quality. By <strong>2:00 AM</strong> the same night, <a href="https://flowstep.gaiada.online">flowstep.gaiada.online</a> was live, admin login worked, the contact form persisted to the database, and Schema.org JSON-LD was being served on every menu item. One operator. Five hours. About 95% of the keystrokes belonged to AI.</p>
+</section>
+
+<section>
+  <h2>Why this matters for teams</h2>
+  <p>Most agencies still treat new client builds like artisan work — discovery week, design week, build sprint, content sprint, deploy week. Gaia's experiment proves a different shape is possible: <strong>scaffold the visible 80% in an evening, spend the rest of the engagement on the parts that need a human</strong> — copy, photography, content modelling, integrations, polish.</p>
+  <p>The unlock isn't any single AI tool. It's the <strong>pipeline</strong> — a series of constrained handoffs where each stage's output is the next stage's input, with the same stack assumption baked in throughout.</p>
+</section>
+
+<section>
+  <h2>The pipeline</h2>
+  <div class="pipeline">
+    <div class="stage">
+      <span class="num">Stage 1</span>
+      <h4>Prompt Builder</h4>
+      <p>~52-question form generates a stack-anchored design prompt.</p>
+    </div>
+    <div class="stage">
+      <span class="num">Stage 2</span>
+      <h4>Figma Make</h4>
+      <p>AI design tool produces 6 standalone Vite+React pages.</p>
+    </div>
+    <div class="stage">
+      <span class="num">Stage 3</span>
+      <h4>Claude Code</h4>
+      <p>Consolidates, wires Payload CMS, deploys to production.</p>
+    </div>
+    <div class="stage">
+      <span class="num">Stage 4</span>
+      <h4>Live site</h4>
+      <p>HTTPS, CMS-driven, monitored, deployable from main.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Stage 1 — The Prompt Builder</h2>
+  <p>The questionnaire is at <a href="https://gaia-digital-agency.github.io/aiprompt_web/">gaia-digital-agency.github.io/aiprompt_web</a>. It's a single static HTML/CSS/JS app, also AI-built, that asks ~52 questions across nine sections — project basics, audience, visual direction, site structure, functionality, tracking, content readiness, technical, output mode — and generates a structured Figma Make / Flowstep prompt with the <strong>3PVRTN stack constraint</strong> baked in:</p>
+  <p style="text-align:center; font-weight:600; color:var(--terracotta); font-size:1.05rem;">
+    PostgreSQL · Payload CMS · Python flow scripting · Vite · React · Tailwind · Node
+  </p>
+  <figure>
+    <img src="images/prompt-builder.png" alt="Gaia AI Prompt Builder — questionnaire showing technical preferences and the generated prompt output" />
+    <figcaption>Stage 1 — the Prompt Builder, mid-flow. Stack constraints + visual direction + functionality answers feed into a single comprehensive prompt for Figma Make.</figcaption>
+  </figure>
+  <p>For Flowstep, the answers were <em>restaurant marketing site, 5 pages, terracotta + emerald palette, geometric sans, Lighthouse 90+, WCAG AA, shadcn/ui exclusive</em>. The Builder produced one self-contained prompt — about 150 lines of structured Markdown — that captured every constraint a designer would otherwise email back and forth for a week.</p>
+  <div class="callout">
+    <strong>Human time at this stage:</strong> ~10 minutes filling in dropdowns. Almost no free-text fields, by design — the form is engineered to keep humans out of the prompt-engineering business.
+  </div>
+</section>
+
+<section>
+  <h2>Stage 2 — Figma Make</h2>
+  <p>The prompt was pasted into Figma Make. Figma's AI design tool generated <strong>six separate Vite + React 19 + Tailwind v4 + shadcn/ui projects</strong> — one per page (Home, About, Services, Branches, Menu, Contact) — plus a PNG mockup of each. Together: ~5,100 lines of pixel-faithful JSX, all using shadcn primitives, all in the right palette and typography.</p>
+  <p>Figma Make's strength is <strong>fidelity-to-brief at speed</strong>. Its weakness is that each page is a standalone project — disconnected, no router, no shared header, no backend. Useful raw material; not a deliverable.</p>
+  <figure>
+    <img src="images/sites-preview.png" alt="Six final Flowstep pages side by side: Home, About, Services, Branches, Menu, Contact" />
+    <figcaption>Stage 4 — the six pages after consolidation, CMS wiring, and production deploy. The visual direction is faithful to what Figma Make scaffolded; the architecture beneath it is entirely different.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Stage 3 — Claude Code does the work nobody enjoys</h2>
+  <p>This is where the 5-hour build was won. Claude Code (Anthropic's CLI, running Opus 4.7 with a million-token context) operated as a <strong>full-stack agent with shell access</strong> — not just writing files, but provisioning Postgres, running migrations, debugging PM2 crashloops, editing live Nginx configs, and issuing TLS certs.</p>
+
+  <h3>What Claude built (frontend)</h3>
+  <p>Merged the six standalone Vite apps into a single pnpm monorepo. Extracted shared <code>SiteHeader</code> and <code>SiteFooter</code>. Wired React Router 7 with <code>Suspense</code>-based code splitting (Home eager as the LCP target; everything else lazy). Wrote a no-deps <code>usePageMeta</code> hook to replace <code>react-helmet-async</code>, which doesn't support React 19. Lifted Figma's hardcoded hex colors into Tailwind v4 <code>@theme</code> tokens. Wired the contact form with honeypot + rate limit + sonner toast feedback. Added <code>BranchDetailPage</code> for <code>/branches/:slug</code> with Schema.org <code>Restaurant</code> JSON-LD generated from CMS data.</p>
+
+  <h3>What Claude built (backend, from scratch)</h3>
+  <p><code>packages/cms/</code>: Payload CMS v2.32 on Express, port 3030. Six collections — <code>Users</code>, <code>Media</code>, <code>Branches</code>, <code>MenuItems</code>, <code>FAQs</code>, <code>ContactSubmissions</code>. Postgres adapter via drizzle. Custom <code>POST /api/contact</code> endpoint with zod validation. Idempotent <code>seed.ts</code> creating the admin user, three branches, four FAQs, and ten menu items. CORS + CSRF allowlist. React 18 isolated from the web's React 19 to keep the admin UI bundle clean.</p>
+
+  <h3>What Claude built (CMS-driven frontend)</h3>
+  <p>A small <code>useCms</code> SWR-style hook (no extra dep — just <code>fetch</code> + an in-memory cache). Wired <code>BranchesPage</code>, <code>BranchDetailPage</code>, <code>MenuPage</code> (with category Tabs as state-driven filter), and <code>ServicesPage</code> FAQ accordion all to fetch from Payload's REST API. Generated Schema.org <code>Menu</code> / <code>MenuSection</code> / <code>MenuItem</code> JSON-LD with <code>suitableForDiet</code> and <code>offers.price</code> from the CMS — making good on what the original Figma export had only <em>claimed</em> in a developer note.</p>
+
+  <h3>What Claude built (infra)</h3>
+  <p>PM2 ecosystem config, Nginx vhost block (appended to the existing <code>subdomains.gaiada.online</code> file matching fleet convention), Postgres bootstrap SQL, deploy script, backup script, GitHub Actions CI workflow. On the server: chowned the directory, generated a 32-byte <code>PAYLOAD_SECRET</code>, created the Postgres role + DB, ran migrations, ran seeds, integrated the Nginx vhost, ran <code>certbot --nginx</code> for Let's Encrypt + HTTP→HTTPS 301, and registered the PM2 app for boot persistence.</p>
+
+  <div class="callout">
+    <strong>The unlock:</strong> Claude wasn't just a code generator. It was a sysadmin, a DBA, a release engineer, and a debugger — all in the same session, with the same context. Without that operational scope, the same work would have taken days.
+  </div>
+</section>
+
+<section>
+  <h2>Stage 4 — Live site, 2 AM</h2>
+  <table>
+    <tr><th style="width:32%">URL</th><td><a href="https://flowstep.gaiada.online">https://flowstep.gaiada.online</a></td></tr>
+    <tr><th>Admin</th><td><a href="https://flowstep.gaiada.online/admin">https://flowstep.gaiada.online/admin</a></td></tr>
+    <tr><th>TLS</th><td>Let's Encrypt, auto-renewing</td></tr>
+    <tr><th>Lighthouse</th><td>Performance <strong>81</strong> · Accessibility <strong>95</strong> · Best Practices <strong>100</strong> · SEO <strong>100</strong></td></tr>
+    <tr><th>Routes verified</th><td>/, /about, /services, /branches, /branches/:slug, /menu, /contact, /admin, /healthz, /sitemap.xml, /robots.txt — all 200</td></tr>
+    <tr><th>APIs verified</th><td>/api/branches, /api/menu-items, /api/faqs, /api/contact — all 200, persistence end-to-end</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Timeline</h2>
+  <table>
+    <tr><th style="width:18%">Time (GMT+8)</th><th>What happened</th></tr>
+    <tr><td>9:00 PM</td><td>Filled in the Prompt Builder questionnaire (Stage 1)</td></tr>
+    <tr><td>9:10 PM</td><td>Pasted prompt into Figma Make, downloaded six page exports (Stage 2)</td></tr>
+    <tr><td>9:30 PM</td><td>Claude Code session started — server recon + repo bootstrap</td></tr>
+    <tr><td>10:00 PM</td><td>Frontend consolidation complete — single Vite app with six routes</td></tr>
+    <tr><td>11:00 PM</td><td>Payload CMS scaffolded — collections, contact endpoint, seed script</td></tr>
+    <tr><td>11:30 PM</td><td>First deploy to <code>gda-s01</code> — pnpm install, schema migrate, seed</td></tr>
+    <tr><td>12:00 AM</td><td>TLS issued via certbot, every route 200, admin login working</td></tr>
+    <tr><td>12:30 AM</td><td>v1.5 — wired CMS data to BranchesPage, MenuPage, FAQ accordion</td></tr>
+    <tr><td>1:00 AM</td><td>Cleanup pass — deleted 27 MB of dead Figma source, stripped 530 lines of <code>data-id</code> noise</td></tr>
+    <tr><td>1:30 AM</td><td>Flattened server layout to match fleet convention</td></tr>
+    <tr><td>2:00 AM</td><td>Final smoke pass — repo, server, docs all in sync</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>What "95% AI" actually means</h2>
+  <p><strong>AI did:</strong> the Prompt Builder app itself; all the page JSX; the entire Payload backend, every collection, the contact endpoint, the seed script; all the infra; the server provisioning; the iteration when things broke (an ESM/CJS conflict in Payload v2 builds, an <code>EADDRINUSE</code> from an orphan node process, a <code>serverURL</code> empty-string fallback that Payload coerced to localhost, a Payload v2 <code>migrate:create</code> that no-ops new columns on existing tables, a Capistrano-style deploy layout that was wrong for the fleet — then flattened on instruction).</p>
+  <p><strong>Human did:</strong> decided the project should exist; filled the form (~10 min); pasted the prompt; approved the architectural plan before going to YOLO mode; course-corrected mid-build ("DNS is .online not .com", "fleet uses flat git checkouts not Capistrano", "delete dead code", "match the PNGs"); spotted things AI missed (a broken Charred Eggplant image URL, a Figma boilerplate "Developer note" block on the menu page); approved server access via Google Cloud IAP.</p>
+  <p>The 5% human contribution was <strong>direction, taste, and verification</strong> — the parts that benefit most from a person in the loop. Everything else was AI.</p>
+</section>
+
+<section class="takeaways">
+  <h2>What this means for your team</h2>
+  <ol>
+    <li><strong>Stack-anchored prompting is the unlock.</strong> Every artifact — design, components, deploy script — was constrained by 3PVRTN from the very first prompt. No AI hallucinated Next.js or MongoDB because the prompt didn't allow it. If your team has a standard stack, encode it once at the prompt layer and never re-explain it.</li>
+    <li><strong>Figma Make is a scaffolder, not a finisher.</strong> Treat its output as raw material. The pixel fidelity is real; the architecture isn't. Plan for a consolidation pass before you ship.</li>
+    <li><strong>Claude Code with operational scope is the multiplier.</strong> A coding AI that can also <code>ssh</code>, run <code>psql</code>, edit Nginx, and call <code>certbot</code> is qualitatively different from one that only writes files. Most of the 5-hour speed came from removing the human as the dispatcher between "wrote code" and "ran code on a server".</li>
+    <li><strong>Payload CMS is the right backend for AI-scaffolded sites.</strong> Headless, type-safe, drizzle-backed Postgres, admin UI included. Once the collections are defined, the same AI can seed them, fetch from them, and render Schema.org markup from them — no separate ORM or admin tool to bolt on.</li>
+    <li><strong>The human is still the editor.</strong> Every architectural decision (deploy layout, scope of v1, CMS-driven vs hardcoded) was made by the human. The AI executed; the human directed and verified. That's the actual workflow — not "AI replaces the team" but "AI handles the typing, the team handles the judgement".</li>
+  </ol>
+</section>
+
+<section>
+  <h2>The repeatable playbook</h2>
+  <p>For your next client build:</p>
+  <ol>
+    <li>Fill in the Prompt Builder for the client. ~10 minutes.</li>
+    <li>Paste the generated prompt into Figma Make. ~5 minutes for the AI to scaffold.</li>
+    <li>Hand the Figma exports + the brief to a Claude Code session with shell access to your fleet box.</li>
+    <li>Tell it: <em>"Consolidate, wire Payload CMS for content sections, deploy to <code>&lt;site&gt;.gaiada.online</code> on <code>gda-s01</code>. Match fleet convention."</em></li>
+    <li>Expect to spend an evening watching, redirecting, and verifying. Expect a live site by morning.</li>
+  </ol>
+  <p>Then the engagement actually begins — copywriting, photography, real content modelling, integrations, performance pass. <strong>The plumbing is done in night one.</strong></p>
+</section>
+
+</main>
+
+<footer>
+  Built by <a href="https://www.gaiada.com">Gaia Digital Agency</a> on the 3PVRTN stack ·
+  <a href="https://flowstep.gaiada.online">Live</a> ·
+  <a href="https://github.com/Gaia-Digital-Agency/flowstep_sample">Source</a>
+</footer>
+
+</body>
+</html>
