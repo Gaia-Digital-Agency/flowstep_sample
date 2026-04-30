@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useCms, type PayloadList, type MenuItemDoc } from "@/hooks/useCms";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
   CalendarCheck,
-  Code2,
   Leaf,
   MessageCircle,
   Music2,
@@ -91,16 +90,60 @@ const CATEGORIES: Array<{ value: MenuItemDoc["category"] | "all"; label: string 
   { value: "tasting", label: "Tasting" },
 ];
 
+const DIET_MAP: Record<string, string> = {
+  vegetarian: "https://schema.org/VegetarianDiet",
+  vegan: "https://schema.org/VeganDiet",
+  "gluten-free": "https://schema.org/GlutenFreeDiet",
+};
+
 export default function MenuPage() {
-  usePageMeta({
-    title: "Menu — Seasonal plates, modern technique",
-    description: "Seasonal plates with modern technique — dishes designed to surprise and reward.",
-    canonical: "https://flowstep.gaiada.online/menu",
-  });
   const { data, loading, error } = useCms<PayloadList<MenuItemDoc>>(
     "/api/menu-items?limit=200&where[available][equals]=true&sort=category",
   );
   const allItems = data?.docs ?? [];
+
+  const jsonLd = useMemo(() => {
+    if (allItems.length === 0) return undefined;
+    const sectionsByCategory = new Map<string, MenuItemDoc[]>();
+    for (const i of allItems) {
+      if (!sectionsByCategory.has(i.category)) sectionsByCategory.set(i.category, []);
+      sectionsByCategory.get(i.category)!.push(i);
+    }
+    return {
+      "@context": "https://schema.org",
+      "@type": "Menu",
+      name: "Gaia AI Menu",
+      hasMenuSection: Array.from(sectionsByCategory.entries()).map(([cat, items]) => ({
+        "@type": "MenuSection",
+        name: cat[0].toUpperCase() + cat.slice(1),
+        hasMenuItem: items.map((i) => ({
+          "@type": "MenuItem",
+          name: i.name,
+          description: i.description,
+          image: i.imageUrl || i.image?.url,
+          suitableForDiet: (i.tags || [])
+            .map((t) => DIET_MAP[t])
+            .filter(Boolean),
+          offers:
+            typeof i.price === "number"
+              ? {
+                  "@type": "Offer",
+                  price: String(i.price),
+                  priceCurrency: i.currency || "MYR",
+                }
+              : undefined,
+        })),
+      })),
+    };
+  }, [allItems]);
+
+  usePageMeta({
+    title: "Menu — Seasonal plates, modern technique",
+    description: "Seasonal plates with modern technique — dishes designed to surprise and reward.",
+    canonical: "https://flowstep.gaiada.online/menu",
+    jsonLd,
+  });
+
   const [active, setActive] = useState<string>("all");
   const visible = active === "all" ? allItems : allItems.filter((i) => i.category === active);
   return (
@@ -226,49 +269,6 @@ export default function MenuPage() {
             {visible.map((item) => (
               <MenuItemCard key={item.id} item={item} />
             ))}
-          </section>
-          <section
-            className="mt-12"
-            data-id="561d237e-fd92-57af-a2a8-dd0adbfdeeb2"
-          >
-            <Card
-              className="border-black/1 border-0 border-solid p-6 flex-row items-start gap-4"
-              style={{ backgroundColor: "#E8E2DC" }}
-              data-id="aacb9c20-9f53-5021-8f60-0f4a49bc8b45"
-            >
-              <div
-                className="size-10 shrink-0 rounded-lg flex justify-center items-center"
-                style={{ backgroundColor: "#FAF7F4" }}
-                data-id="bb7f37ea-b34c-57de-93dc-3807a20f7f12"
-              >
-                <Code2
-                  className="size-5"
-                  style={{ color: "#2D6A4F" }}
-                  data-id="329d1939-a928-5e12-bb5b-bf31aa24e494"
-                />
-              </div>
-              <div
-                className="flex flex-col gap-1"
-                data-id="99b66912-38f2-500d-acc2-ad14c2dce8c8"
-              >
-                <p
-                  className="font-medium text-sm leading-5"
-                  style={{ color: "#1F1B16" }}
-                  data-id="689dd468-b4ae-533d-b2c5-2018aad03f9e"
-                >
-                  Developer note · SEO
-                </p>
-                <p
-                  className="text-sm leading-5"
-                  style={{ color: "#5C5247" }}
-                  data-id="1456f934-526b-5a6c-ba51-1b1c9318714e"
-                >
-                  Product schema markup applied to all menu items for SEO. Each
-                  MenuItem renders structured data (name, description, image,
-                  offers.price, suitableForDiet) via Headless Payload CMS.
-                </p>
-              </div>
-            </Card>
           </section>
         </main>
       </main>

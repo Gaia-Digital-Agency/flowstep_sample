@@ -45,7 +45,7 @@ async function main() {
       phone: "+60 3 2148 0001",
       hours: "Tue–Sun · 12:00 – 23:00",
       imageUrl:
-        "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
     {
       slug: "branch-2",
@@ -56,7 +56,7 @@ async function main() {
       phone: "+60 4 955 0002",
       hours: "Daily · 16:00 – 24:00",
       imageUrl:
-        "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=1600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
     {
       slug: "branch-3",
@@ -67,7 +67,7 @@ async function main() {
       phone: "+60 3 6101 0003",
       hours: "Wed–Sun · 17:00 – 23:00",
       imageUrl:
-        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
   ];
   for (const b of BRANCHES) {
@@ -110,7 +110,7 @@ async function main() {
       currency: "MYR",
       tags: ["vegetarian", "signature"],
       imageUrl:
-        "https://images.unsplash.com/photo-1574031491550-35f444917508?w=600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1574031491550-35f444917508?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
     {
       slug: "charred-eggplant",
@@ -122,7 +122,7 @@ async function main() {
       currency: "MYR",
       tags: ["vegan", "gluten-free"],
       imageUrl:
-        "https://images.unsplash.com/photo-1604908554049-15768cd8b56a?w=600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1606756790138-261d2b21cd75?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
     {
       slug: "slow-cooked-lamb",
@@ -134,7 +134,7 @@ async function main() {
       currency: "MYR",
       tags: ["signature"],
       imageUrl:
-        "https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1544025162-d76694265947?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
     {
       slug: "chargrilled-snapper",
@@ -146,7 +146,7 @@ async function main() {
       currency: "MYR",
       tags: ["gluten-free"],
       imageUrl:
-        "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
     {
       slug: "garden-risotto",
@@ -158,7 +158,7 @@ async function main() {
       currency: "MYR",
       tags: ["vegetarian"],
       imageUrl:
-        "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
     {
       slug: "burnt-honey-cheesecake",
@@ -170,7 +170,7 @@ async function main() {
       currency: "MYR",
       tags: ["signature"],
       imageUrl:
-        "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
     {
       slug: "dark-chocolate-tart",
@@ -181,7 +181,7 @@ async function main() {
       currency: "MYR",
       tags: ["vegetarian"],
       imageUrl:
-        "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
     {
       slug: "smoked-old-fashioned",
@@ -193,7 +193,7 @@ async function main() {
       currency: "MYR",
       tags: ["signature"],
       imageUrl:
-        "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
     {
       slug: "garden-spritz",
@@ -205,7 +205,7 @@ async function main() {
       currency: "MYR",
       tags: ["vegan"],
       imageUrl:
-        "https://images.unsplash.com/photo-1547595628-c61a29f496f0?w=600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1547595628-c61a29f496f0?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
     {
       slug: "tasting-menu-7",
@@ -217,7 +217,7 @@ async function main() {
       currency: "MYR",
       tags: ["signature"],
       imageUrl:
-        "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=80&auto=format",
+        "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&h=600&fit=crop&crop=entropy&q=80&auto=format",
     },
   ];
   for (const m of MENU_ITEMS) {
