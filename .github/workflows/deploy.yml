@@ -1,0 +1,65 @@
+name: Deploy to gda-s01
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: flowstep-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build web
+        run: pnpm --filter @flowstep/web build
+
+      - name: Setup SSH
+        env:
+          SSH_KEY: ${{ secrets.GDA_S01_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          cat <<EOF >> ~/.ssh/config
+          Host gda-s01
+            HostName 34.124.244.233
+            User azlan
+            IdentityFile ~/.ssh/id_ed25519
+            StrictHostKeyChecking accept-new
+            IdentitiesOnly yes
+          EOF
+
+      - name: Deploy
+        run: bash infra/deploy/deploy.sh --skip-build
+        env:
+          REMOTE: gda-s01
+
+      - name: Smoke test
+        run: |
+          set -e
+          for path in / /about /services /branches /menu /contact /admin /healthz; do
+            code=$(curl -sS -o /dev/null -w "%{http_code}" "https://flowstep.gaiada.online$path")
+            echo "  $path → $code"
+            test "$code" = "200" || exit 1
+          done

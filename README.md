@@ -48,3 +48,22 @@ See `infra/deploy/deploy.sh` for the full release flow (atomic symlink, last-5 r
 ## Repo
 
 Pushes to `git@github.com-gaiada:Gaia-Digital-Agency/flowstep_sample.git`.
+
+## Ops
+
+- **Logs**: `pm2 logs flowstep-cms` on `gda-s01`. PM2 also writes to `/var/www/flowstep/shared/logs/cms.{out,err}.log`.
+- **DB**: Postgres 18 on `gda-s01`, role `flowstep`, DB `flowstep`, password in `/var/www/flowstep/shared/.env`.
+- **Migrations**: Payload uses drizzle. To apply schema changes after editing collections:
+  ```bash
+  ssh gda-s01 'cd /var/www/flowstep/current/packages/cms && set -a && source .env && set +a && PAYLOAD_CONFIG_PATH=src/payload.config.ts ./node_modules/.bin/payload migrate:create --skip-empty && PAYLOAD_CONFIG_PATH=src/payload.config.ts ./node_modules/.bin/payload migrate'
+  ```
+- **Backups**: `infra/backup/backup.sh` — installable as a daily cron, optionally pushes to GCS via `BACKUP_BUCKET`.
+- **CI/CD**: `.github/workflows/deploy.yml` — push to `main` redeploys. Requires repo secret `GDA_S01_SSH_KEY` (the matching private key for the `azlan@gda-s01` deploy login).
+- **TLS**: certbot auto-renews via systemd timer (`systemctl status certbot.timer`).
+
+## Known limitations (v1 → v2)
+
+- **Lighthouse Performance: 81** (target 90+). LCP ~4s is the SPA hydration tax. To close the gap we need SSR (Vite SSR or Astro). All other categories are at 95+ (a11y), 100 (best practices), 100 (SEO).
+- **Pages, MenuItems, Branches detail content** is currently hardcoded in the route components. Wire through to Payload collections (already modelled) in v2.
+- **SMTP** for contact-form notifications is unconfigured. Submissions land in `contact_submissions` regardless; set `SMTP_HOST/USER/PASS` in `/var/www/flowstep/shared/.env` to enable email.
+- **No automated backups yet** — backup.sh is in the repo but not installed on cron. Run the install snippet at the top of the script when ready.

@@ -88,12 +88,25 @@ echo "▶ (Re)starting PM2 app"
 ssh "$REMOTE" bash -se <<EOF
 set -euo pipefail
 cd "$TARGET_DIR/current"
+
+# pm2 reload preserves the original cwd of the process — but since we deploy
+# atomically into a new release dir, we MUST delete + start so PM2 picks up
+# the new cwd (= the new symlink target).
 if pm2 describe "$APP_NAME" >/dev/null 2>&1; then
-  pm2 reload "$APP_NAME" --update-env
-else
-  pm2 start ecosystem.config.cjs
-  pm2 save
+  pm2 delete "$APP_NAME"
 fi
+
+# Belt & braces: if anything else is still on :3030 (e.g. an orphan from an
+# interrupted prior run), kill it before starting fresh.
+ORPHAN=\$(ss -tlnp 2>/dev/null | awk '/:3030 / {print \$NF}' | grep -oE 'pid=[0-9]+' | head -1 | cut -d= -f2 || true)
+if [ -n "\$ORPHAN" ]; then
+  echo "  killing orphan node on :3030 (pid \$ORPHAN)"
+  kill "\$ORPHAN" 2>/dev/null || true
+  sleep 2
+fi
+
+pm2 start ecosystem.config.cjs --only "$APP_NAME"
+pm2 save
 EOF
 
 echo "▶ Reloading Nginx"
