@@ -1,4 +1,6 @@
-import { Helmet } from "react-helmet-async";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import {
   CalendarCheck,
   Code2,
@@ -9,13 +11,13 @@ import {
 import { Card, CardHeader, CardFooter } from "@/components/ui/card";
 
 export default function MenuPage() {
+  usePageMeta({
+    title: "Menu — Seasonal plates, modern technique",
+    description: "Seasonal plates with modern technique — dishes designed to surprise and reward.",
+    canonical: "https://flowstep.gaiada.online/menu",
+  });
   return (
     <>
-      <Helmet>
-        <title>Menu — Seasonal plates, modern technique</title>
-        <meta name="description" content="Seasonal plates with modern technique — dishes designed to surprise and reward." />
-        <link rel="canonical" href="https://flowstep.gaiada.online/menu" />
-      </Helmet>
       <main>
         <main
           className="mx-auto p-12"

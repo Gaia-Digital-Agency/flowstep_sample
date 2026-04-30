@@ -1,4 +1,9 @@
-import { Helmet } from "react-helmet-async";
+import { useState, type FormEvent } from "react";
+import { toast } from "sonner";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   Clock,
   Leaf,
@@ -12,13 +17,61 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 
 export default function ContactPage() {
+  usePageMeta({
+    title: "Contact — Reservations, enquiries, and visits",
+    description: "Reserve a table, send an enquiry, or visit one of our three branches.",
+    canonical: "https://flowstep.gaiada.online/contact",
+  });
+
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (submitting) return;
+
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+
+    // Honeypot — silently drop bots that fill it
+    if (fd.get("website")) {
+      toast.success("Message sent. We'll be in touch within 24 hours.");
+      form.reset();
+      return;
+    }
+
+    const payload = {
+      name: String(fd.get("name") ?? "").trim(),
+      email: String(fd.get("email") ?? "").trim(),
+      phone: String(fd.get("phone") ?? "").trim() || undefined,
+      message: String(fd.get("message") ?? "").trim(),
+    };
+
+    if (!payload.name || !payload.email || !payload.message) {
+      toast.error("Please fill in your name, email, and message.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      toast.success("Message sent. We'll be in touch within 24 hours.");
+      form.reset();
+      window.dispatchEvent(new CustomEvent("flowstep:contact_submit"));
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong. Please try again or call us directly.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <>
-      <Helmet>
-        <title>Contact — Reservations, enquiries, and visits</title>
-        <meta name="description" content="Reserve a table, send an enquiry, or visit one of our three branches." />
-        <link rel="canonical" href="https://flowstep.gaiada.online/contact" />
-      </Helmet>
       <main>
         <main
           className="max-w-[1140px] mx-auto px-8 py-12 w-full"
@@ -60,8 +113,18 @@ export default function ContactPage() {
               className="grid grid-cols-12 gap-8"
               data-id="a9d3a143-a0cb-5c84-b805-a73560758a17"
             >
+              <form onSubmit={handleSubmit} className="col-span-7" noValidate>
+                {/* honeypot */}
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  className="sr-only"
+                  aria-hidden="true"
+                />
               <Card
-                className="col-span-7 border-neutral-200 border-0 border-solid p-6 gap-4"
+                className="border-neutral-200 border-0 border-solid p-6 gap-4"
                 data-id="6e5f5045-c019-5fd8-8670-1988eb8f5931"
               >
                 <CardHeader
@@ -203,23 +266,26 @@ export default function ContactPage() {
                     data-conversion="contact_form_submit"
                     style={{ backgroundColor: "#C4714F" }}
                     type="submit"
+                    disabled={submitting}
                     data-id="479fa4e0-6741-5e66-9c3c-d0daacd6eafd"
                   >
                     <Send
                       className="size-4"
                       data-id="37a42549-8c99-50e6-9390-fc44fb0fabdc"
                     />
-                    Send Message
+                    {submitting ? "Sending…" : "Send Message"}
                   </Button>
                   <Button
                     className="text-neutral-950"
                     variant="ghost"
+                    type="reset"
                     data-id="c5b4722a-0af8-5c63-9b6a-99a2b5c5df45"
                   >
                     Clear
                   </Button>
                 </CardFooter>
               </Card>
+              </form>
               <div
                 className="col-span-5 flex flex-col gap-4"
                 data-id="f41da19f-e76b-5dca-b9af-b450ecc55853"
@@ -833,7 +899,6 @@ export default function ContactPage() {
                       <Button
                         className="ring-2 ring-offset-2 text-white"
                         style={{
-                          "[object Object]": "#2D6A4F",
                           backgroundColor: "#C4714F",
                         }}
                         data-id="e1caa4c1-5b53-57f8-b0fb-bbaf965e39cb"
@@ -886,7 +951,6 @@ export default function ContactPage() {
                       </Button>
                       <Button
                         className="ring-2 ring-offset-2"
-                        style={{ "[object Object]": "#2D6A4F" }}
                         variant="ghost"
                         data-id="98de4919-53a7-537e-95d2-a1ccbdf3217f"
                       >

@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import {
   Award,
   Leaf,
@@ -10,13 +10,13 @@ import {
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function AboutPage() {
+  usePageMeta({
+    title: "About Gaia AI — Our story, our craft",
+    description: "How Gaia AI grew from a single kitchen into a polished, multi-branch dining experience.",
+    canonical: "https://flowstep.gaiada.online/about",
+  });
   return (
     <>
-      <Helmet>
-        <title>About Gaia AI — Our story, our craft</title>
-        <meta name="description" content="How Gaia AI grew from a single kitchen into a polished, multi-branch dining experience." />
-        <link rel="canonical" href="https://flowstep.gaiada.online/about" />
-      </Helmet>
       <main>
         <section
           className="relative w-full h-70 overflow-hidden"

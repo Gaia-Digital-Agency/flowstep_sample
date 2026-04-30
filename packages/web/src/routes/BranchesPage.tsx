@@ -1,4 +1,7 @@
-import { Helmet } from "react-helmet-async";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   CalendarCheck,
   Clock,
@@ -15,13 +18,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function BranchesPage() {
+  usePageMeta({
+    title: "Our Branches — Three locations, one Gaia AI",
+    description: "Find Gaia AI across three signature branches, each with its own character and view.",
+    canonical: "https://flowstep.gaiada.online/branches",
+  });
   return (
     <>
-      <Helmet>
-        <title>Our Branches — Three locations, one Gaia AI</title>
-        <meta name="description" content="Find Gaia AI across three signature branches, each with its own character and view." />
-        <link rel="canonical" href="https://flowstep.gaiada.online/branches" />
-      </Helmet>
       <main>
         <main
           className="max-w-[1140px] mx-auto px-8 py-12 w-full"

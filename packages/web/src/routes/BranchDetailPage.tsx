@@ -1,8 +1,8 @@
 import { useParams, Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 import { MapPin, Phone, Clock, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const BRANCHES: Record<
   string,
@@ -37,37 +37,38 @@ const BRANCHES: Record<
   },
 };
 
+function NotFoundBranch() {
+  usePageMeta({
+    title: "Branch not found — Gaia AI",
+    description: "The branch you're looking for doesn't exist.",
+    noindex: true,
+  });
+  return (
+    <main className="max-w-[1140px] mx-auto px-8 py-24 text-center">
+      <h1 className="text-3xl mb-4">Branch not found</h1>
+      <p className="text-[#1F1B17]/70 mb-8">
+        The branch you're looking for doesn't exist.
+      </p>
+      <Button asChild>
+        <Link to="/branches">
+          <ArrowLeft className="size-4" /> Back to all branches
+        </Link>
+      </Button>
+    </main>
+  );
+}
+
 export default function BranchDetailPage() {
   const { slug = "" } = useParams();
   const branch = BRANCHES[slug];
 
-  if (!branch) {
-    return (
-      <main className="max-w-[1140px] mx-auto px-8 py-24 text-center">
-        <Helmet>
-          <title>Branch not found — Gaia AI</title>
-        </Helmet>
-        <h1 className="text-3xl mb-4">Branch not found</h1>
-        <p className="text-[#1F1B17]/70 mb-8">
-          The branch you're looking for doesn't exist.
-        </p>
-        <Button asChild>
-          <Link to="/branches">
-            <ArrowLeft className="size-4" /> Back to all branches
-          </Link>
-        </Button>
-      </main>
-    );
-  }
-
-  return (
-    <>
-      <Helmet>
-        <title>{branch.name} — Gaia AI</title>
-        <meta name="description" content={branch.tagline} />
-        <link rel="canonical" href={`https://flowstep.gaiada.online/branches/${slug}`} />
-        <script type="application/ld+json">
-          {JSON.stringify({
+  usePageMeta(
+    branch
+      ? {
+          title: `${branch.name} — Gaia AI`,
+          description: branch.tagline,
+          canonical: `https://flowstep.gaiada.online/branches/${slug}`,
+          jsonLd: {
             "@context": "https://schema.org",
             "@type": "Restaurant",
             name: branch.name,
@@ -76,9 +77,15 @@ export default function BranchDetailPage() {
             openingHours: branch.hours,
             image: branch.image,
             url: `https://flowstep.gaiada.online/branches/${slug}`,
-          })}
-        </script>
-      </Helmet>
+          },
+        }
+      : { title: "Branch not found — Gaia AI", noindex: true },
+  );
+
+  if (!branch) return <NotFoundBranch />;
+
+  return (
+    <>
       <main>
         <section className="max-w-[1140px] mx-auto px-8 py-12">
           <Link

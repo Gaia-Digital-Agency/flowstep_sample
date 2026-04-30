@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import {
   ArrowRight,
   Award,
@@ -18,13 +18,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function HomePage() {
+  usePageMeta({
+    title: "Gaia AI — Energetic dining, polished service",
+    description: "Gaia AI is a luxury dining concept blending bold flavour with polished hospitality.",
+    canonical: "https://flowstep.gaiada.online/",
+  });
   return (
     <>
-      <Helmet>
-        <title>Gaia AI — Energetic dining, polished service</title>
-        <meta name="description" content="Gaia AI is a luxury dining concept blending bold flavour with polished hospitality." />
-        <link rel="canonical" href="https://flowstep.gaiada.online/" />
-      </Helmet>
       <main>
         <section
           className="max-w-[1140px] mx-auto px-8 py-12"

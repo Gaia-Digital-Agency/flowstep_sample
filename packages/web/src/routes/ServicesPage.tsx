@@ -1,4 +1,5 @@
-import { Helmet } from "react-helmet-async";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import {
   ArrowRight,
   Briefcase,
@@ -15,13 +16,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 
 export default function ServicesPage() {
+  usePageMeta({
+    title: "Services — Private dining, events, and bespoke menus",
+    description: "Private rooms, events, and bespoke menus tailored for travellers and locals alike.",
+    canonical: "https://flowstep.gaiada.online/services",
+  });
   return (
     <>
-      <Helmet>
-        <title>Services — Private dining, events, and bespoke menus</title>
-        <meta name="description" content="Private rooms, events, and bespoke menus tailored for travellers and locals alike." />
-        <link rel="canonical" href="https://flowstep.gaiada.online/services" />
-      </Helmet>
       <main>
         <section
           className="px-12 pt-12 pb-8"
